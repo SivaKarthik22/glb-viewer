@@ -45,10 +45,10 @@ function CanvasComponent() {
   }, [enableCanvas]);
 
   if(enableCanvas)
-    return <canvas ref={reactCanvas} id="canvas" />;
+    return <canvas ref={reactCanvas} id="canvas" className="pseudo-container" />;
   else{
     return (
-      <div>
+      <div id="pre-canvas" className="pseudo-container">
         <button onClick={()=>{setEnableCanvas(true)}}>Upload GLB/GLTF file</button>
       </div>
     );  

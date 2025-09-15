@@ -1,7 +1,53 @@
 #root {
   margin: 0 auto;
+  display: flex;
+  position: relative;
+  width: 100%;
 }
 
-#canvas{
+.pseudo-container{
+  width: 100%;
+  flex: 1;
+}
+
+#side-panel{
+  width: 20%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  background-color: grey;
   height: 100vh;
 }
+
+#panel-head{
+  height: 50px;
+  display: flex;
+}
+
+#panel-body{
+  flex: 1;
+}
+
+.section-heading{
+  flex: 1;
+}
+
+#abs-buttons{
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+#anim-player{
+  display: flex;
+  height: 60px;
+}
+
+#flex-comp{
+  display:"flex";
+  flex-direction:"column";
+  flex:1;
+  justify-content: space-between;
+  height: 100vh;
+}
+
