@@ -44,15 +44,16 @@ function CanvasComponent() {
     };
   }, [enableCanvas]);
 
-  if(enableCanvas)
-    return <canvas ref={reactCanvas} id="canvas" className="pseudo-container" />;
-  else{
-    return (
-      <div id="pre-canvas" className="pseudo-container">
-        <button onClick={()=>{setEnableCanvas(true)}}>Upload GLB/GLTF file</button>
-      </div>
-    );  
-  }
+  return (
+    <div className="container">
+      {enableCanvas ? 
+        <canvas ref={reactCanvas} id="canvas"/> :
+        <div id="pre-canvas">
+          <button onClick={()=>{setEnableCanvas(true)}}>Upload GLB/GLTF file</button>
+        </div>
+      }
+    </div>
+  );
 }
 
 export default CanvasComponent;

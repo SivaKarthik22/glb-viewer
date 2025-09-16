@@ -8,12 +8,10 @@ function App() {
 
   return (
     <>
-      <div id='flex-comp'>
-        <CanvasComponent/>
-        <AnimPlayer/>
-      </div>
+      <CanvasComponent/>
       <SidePanel/>
       <AbsoluteButtons/>
+      <AnimPlayer/>
     </>
   )
 }

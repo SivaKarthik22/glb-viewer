@@ -5,9 +5,13 @@
   width: 100%;
 }
 
-.pseudo-container{
-  width: 100%;
+.container{
   flex: 1;
+  height: 100vh;
+  overflow: hidden;
+}
+#canvas{
+  width: 100%;
 }
 
 #side-panel{
@@ -39,15 +43,19 @@
 }
 
 #anim-player{
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
   display: flex;
-  height: 60px;
+  height: 50px;
+  background-color: darkgrey;
 }
 
-#flex-comp{
-  display:"flex";
-  flex-direction:"column";
-  flex:1;
-  justify-content: space-between;
-  height: 100vh;
+#pre-canvas{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
 }
 
