@@ -45,7 +45,7 @@ function CanvasComponent() {
   }, [enableCanvas]);
 
   return (
-    <div className="container">
+    <div className="canvas-container">
       {enableCanvas ? 
         <canvas ref={reactCanvas} id="canvas"/> :
         <div id="pre-canvas">
