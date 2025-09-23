@@ -4,18 +4,21 @@ import AnimPlayer from './components/AnimPlayer'
 import SidePanel from './components/SidePanel'
 import AbsoluteButtons from './components/AbsoluteButtons'
 import Slider from './components/Slider'
+import { ContextProvider } from './context API/ContextProvider'
 
 function App() {
 
   return (
     <>
-      <div className='main-container'>
-        <CanvasComponent/>
-        <AnimPlayer/>
-      </div>
-      <Slider/>
-      <SidePanel/>
-      <AbsoluteButtons/>
+      <ContextProvider>
+        <div className='main-container'>
+          <CanvasComponent />
+          <AnimPlayer />
+        </div>
+        <Slider />
+        <SidePanel />
+        <AbsoluteButtons />
+      </ContextProvider>
     </>
   )
 }
