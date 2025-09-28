@@ -6,9 +6,21 @@ export const ContextProvider = ({children}) => {
     const [variableWidth, setVariableWidth] = useState(20);
     const uploadRef = useRef(null);
     const [enableCanvas, setEnableCanvas] = useState(false);
+    const [file, setFile] = useState("");
+    const [loading, setLoading] = useState(false);
 
-    function onFileUpload(event){
+    function onFileUpload(event){        
+        const file = event.target.files[0];
+        if(!file)
+            return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            setFile(reader.result);
+        };
+        reader.readAsDataURL(file);
+
         setEnableCanvas(true);
+        setLoading(true);
     }
 
     return (
@@ -17,7 +29,10 @@ export const ContextProvider = ({children}) => {
             setVariableWidth,
             uploadRef,
             enableCanvas,
-            onFileUpload
+            onFileUpload,
+            file,
+            loading,
+            setLoading
         }}>
             {children}
         </Context.Provider>

@@ -6,7 +6,7 @@ import { Context } from "../context API/ContextProvider";
 
 function CanvasComponent() {
   const reactCanvas = useRef(null);
-  const {enableCanvas} = useContext(Context);
+  const {enableCanvas, file, loading, setLoading} = useContext(Context);
 
   useEffect(() => {
     if(!enableCanvas)
@@ -19,9 +19,15 @@ function CanvasComponent() {
     const scene = mySceneObj.scene;
 
     if (scene.isReady()) {
-      mySceneObj.onSceneReady();
+      mySceneObj.onSceneReady(file).then(()=>{
+        setLoading(false);
+      });
     } else {
-      scene.onReadyObservable.addOnce(() => mySceneObj.onSceneReady());
+      scene.onReadyObservable.addOnce(() => {
+        mySceneObj.onSceneReady(file).then(()=>{
+          setLoading(false);
+        });
+      });
     }
 
     mySceneObj.engine.runRenderLoop(() => {
@@ -44,15 +50,20 @@ function CanvasComponent() {
         window.removeEventListener("resize", resize);
       }
     };
-  }, [enableCanvas]);
+  }, [enableCanvas, file]);
 
   return (
     <div className="canvas-container">
-      {enableCanvas ? 
-        <canvas ref={reactCanvas} id="canvas"/> :
+      {enableCanvas ? (
+          <>
+            {loading ? <div>Loading...</div> : ""}
+            <canvas ref={reactCanvas} id="canvas"/> 
+          </>
+        ) : (
         <div id="pre-canvas">
           <UploadButton buttonText="Upload GLB/GLTF file" />
         </div>
+        )
       }
     </div>
   );
