@@ -10,14 +10,20 @@ export const ContextProvider = ({children}) => {
     const [loading, setLoading] = useState(false);
 
     function onFileUpload(event){        
-        const file = event.target.files[0];
-        if(!file)
-            return;
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            setFile(reader.result);
-        };
-        reader.readAsDataURL(file);
+        try{
+            const file = event.target.files[0];
+            if(!file)
+                return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                setFile(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }catch(err){
+            setEnableCanvas(false);
+            setLoading(false);
+            setFile("");
+        }
 
         setEnableCanvas(true);
         setLoading(true);
