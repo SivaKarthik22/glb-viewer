@@ -1,10 +1,12 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { } from "@babylonjs/core";
 import MyScene from "../classes/MyScene";
+import UploadButton from "./UploadButton";
+import { Context } from "../context API/ContextProvider";
 
 function CanvasComponent() {
   const reactCanvas = useRef(null);
-  const [enableCanvas, setEnableCanvas] = useState(false);
+  const {enableCanvas} = useContext(Context);
 
   useEffect(() => {
     if(!enableCanvas)
@@ -49,7 +51,7 @@ function CanvasComponent() {
       {enableCanvas ? 
         <canvas ref={reactCanvas} id="canvas"/> :
         <div id="pre-canvas">
-          <button onClick={()=>{setEnableCanvas(true)}}>Upload GLB/GLTF file</button>
+          <UploadButton buttonText="Upload GLB/GLTF file" />
         </div>
       }
     </div>

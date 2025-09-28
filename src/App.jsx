@@ -15,7 +15,7 @@ function App() {
           <CanvasComponent />
           <AnimPlayer />
         </div>
-        <Slider />
+        {/* <Slider /> */}
         <SidePanel />
         <AbsoluteButtons />
       </ContextProvider>
