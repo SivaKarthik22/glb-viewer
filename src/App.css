@@ -9,6 +9,7 @@
   flex: 1;
   overflow: hidden;
   width: 100%;
+  position: relative;
 }
 #canvas{
   width: 100%;
@@ -83,5 +84,38 @@
 
 .upload-input{
   display: none;
+}
+
+#toaster{
+  position: absolute;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: blanchedalmond;
+  padding: 15px;
+  color: black;
+}
+
+#toaster.warning{
+  background-color: orange;
+}
+
+#toaster.error{
+  background-color: red;
+  color: white;
+}
+
+#toaster.green{
+  background-color: greenyellow;
+}
+
+#loading{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: blanchedalmond;
+  padding: 30px;
+  color: black;
 }
 

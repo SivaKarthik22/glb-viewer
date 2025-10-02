@@ -1,12 +1,12 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { } from "@babylonjs/core";
 import MyScene from "../classes/MyScene";
-import UploadButton from "./UploadButton";
 import { Context } from "../context API/ContextProvider";
+import LoadingComp from "./Loading";
 
 function CanvasComponent() {
   const reactCanvas = useRef(null);
-  const {enableCanvas, file, loading, setLoading} = useContext(Context);
+  const {enableCanvas, file, setLoading, enableToast, disableCanvas} = useContext(Context);
 
   useEffect(() => {
     if(!enableCanvas)
@@ -18,15 +18,23 @@ function CanvasComponent() {
     const mySceneObj = new MyScene(canvas);
     const scene = mySceneObj.scene;
 
-    if (scene.isReady()) {
-      mySceneObj.onSceneReady(file).then(()=>{
+    async function onSceneReadyTasks(){
+      mySceneObj.onSceneReady(file)
+      .then(()=>{
         setLoading(false);
+      })
+      .catch(err => {
+        enableToast("Error loading file", "error");
+        disableCanvas();
+        console.error(err);
       });
+    }
+
+    if (scene.isReady()) {
+      onSceneReadyTasks();
     } else {
       scene.onReadyObservable.addOnce(() => {
-        mySceneObj.onSceneReady(file).then(()=>{
-          setLoading(false);
-        });
+        onSceneReadyTasks();
       });
     }
 
@@ -52,21 +60,16 @@ function CanvasComponent() {
     };
   }, [enableCanvas, file]);
 
-  return (
-    <div className="canvas-container">
-      {enableCanvas ? (
-          <>
-            {loading ? <div>Loading...</div> : ""}
-            <canvas ref={reactCanvas} id="canvas"/> 
-          </>
-        ) : (
-        <div id="pre-canvas">
-          <UploadButton buttonText="Upload GLB/GLTF file" />
-        </div>
-        )
-      }
-    </div>
-  );
+  if(enableCanvas){
+    return (
+      <>
+        <canvas ref={reactCanvas} id="canvas"/> 
+        <LoadingComp/>
+      </>
+    );
+  }
+
+  return "";
 }
 
 export default CanvasComponent;

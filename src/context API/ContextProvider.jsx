@@ -4,10 +4,16 @@ export const Context = createContext(null);
 
 export const ContextProvider = ({children}) => {
     const [variableWidth, setVariableWidth] = useState(20);
+    
     const uploadRef = useRef(null);
+    
     const [enableCanvas, setEnableCanvas] = useState(false);
     const [file, setFile] = useState("");
     const [loading, setLoading] = useState(false);
+    
+    const [showToast, setShowToast] = useState(false);
+    const [toastMessage, setToastMessage] = useState("");
+    const [toastType, setToastType] = useState("none");
 
     function onFileUpload(event){        
         try{
@@ -20,13 +26,31 @@ export const ContextProvider = ({children}) => {
             };
             reader.readAsDataURL(file);
         }catch(err){
-            setEnableCanvas(false);
-            setLoading(false);
-            setFile("");
+            disableCanvas();
+            enableToast("Error loading file", "error")
+            console.error(err);
         }
 
         setEnableCanvas(true);
         setLoading(true);
+    }
+
+    function enableToast(toastMessage, toastType){
+        setShowToast(true);
+        setToastMessage(toastMessage);
+        setToastType(toastType);
+    }
+
+    function forceDisableToast(){
+        setShowToast(false);
+        setToastMessage("");
+        setToastType("none");
+    }
+
+    function disableCanvas(){
+        //setEnableCanvas(false);
+        setLoading(false);
+        setFile("");
     }
 
     return (
@@ -38,7 +62,13 @@ export const ContextProvider = ({children}) => {
             onFileUpload,
             file,
             loading,
-            setLoading
+            setLoading,
+            showToast,
+            enableToast,
+            forceDisableToast,
+            toastMessage,
+            toastType,
+            disableCanvas,
         }}>
             {children}
         </Context.Provider>
