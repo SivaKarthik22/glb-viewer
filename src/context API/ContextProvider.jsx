@@ -15,6 +15,8 @@ export const ContextProvider = ({children}) => {
     const [toastMessage, setToastMessage] = useState("");
     const [toastType, setToastType] = useState("none");
 
+    const [sceneAnimationNames, setSceneAnimationNames] = useState([]);
+
     function onFileUpload(event){        
         try{
             const file = event.target.files[0];
@@ -68,6 +70,8 @@ export const ContextProvider = ({children}) => {
             toastMessage,
             toastType,
             disableCanvas,
+            sceneAnimationNames,
+            setSceneAnimationNames,
         }}>
             {children}
         </Context.Provider>

@@ -16,7 +16,7 @@ class MyScene{
         light.intensity = 0.7;
 
         await AppendSceneAsync(file, this.scene);
-        console.log(this.scene.meshes);
+        console.log(this.scene);
     };
 
     onRender(){

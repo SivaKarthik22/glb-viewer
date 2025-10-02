@@ -1,23 +1,29 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { Context } from "../context API/ContextProvider";
 
 function AnimPlayer(){
     const [sliderValue, setSliderValue] = useState(1);
-    return(
-        <div id="anim-player">
-            <button>Play</button>
-            <div className="slidecontainer">
-                <input
-                    type="range"
-                    min="1"
-                    max="100"
-                    value={sliderValue}
-                    className="slider"
-                    id="myRange"
-                    onChange={value => setSliderValue(value)}
-                />
+    const {sceneAnimationNames} = useContext(Context);
+
+    if(sceneAnimationNames.length > 0){
+        return(
+            <div id="anim-player">
+                <button>Play</button>
+                <div className="slidecontainer">
+                    <input
+                        type="range"
+                        min="1"
+                        max="100"
+                        value={sliderValue}
+                        className="slider"
+                        id="myRange"
+                        onChange={value => setSliderValue(value)}
+                    />
+                </div>
             </div>
-        </div>
-    );
+        );
+    }
+    return "";
 }
 
 export default AnimPlayer;

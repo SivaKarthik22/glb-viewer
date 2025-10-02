@@ -6,7 +6,7 @@ import LoadingComp from "./Loading";
 
 function CanvasComponent() {
   const reactCanvas = useRef(null);
-  const {enableCanvas, file, setLoading, enableToast, disableCanvas} = useContext(Context);
+  const {enableCanvas, file, setLoading, enableToast, disableCanvas, setSceneAnimationNames} = useContext(Context);
 
   useEffect(() => {
     if(!enableCanvas)
@@ -22,6 +22,12 @@ function CanvasComponent() {
       mySceneObj.onSceneReady(file)
       .then(()=>{
         setLoading(false);
+        
+        const animNames = []
+        scene.animationGroups.forEach(anim => {
+          animNames.push(anim.name);
+        });
+        setSceneAnimationNames(animNames);
       })
       .catch(err => {
         enableToast("Error loading file", "error");
