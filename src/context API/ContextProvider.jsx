@@ -23,6 +23,8 @@ export const ContextProvider = ({children}) => {
             const reader = new FileReader();
             reader.onload = function(e) {
                 setFile(reader.result);
+                setEnableCanvas(true);
+                setLoading(true);
             };
             reader.readAsDataURL(file);
         }catch(err){
@@ -30,9 +32,6 @@ export const ContextProvider = ({children}) => {
             enableToast("Error loading file", "error")
             console.error(err);
         }
-
-        setEnableCanvas(true);
-        setLoading(true);
     }
 
     function enableToast(toastMessage, toastType){
@@ -48,7 +47,7 @@ export const ContextProvider = ({children}) => {
     }
 
     function disableCanvas(){
-        //setEnableCanvas(false);
+        setEnableCanvas(false);
         setLoading(false);
         setFile("");
     }

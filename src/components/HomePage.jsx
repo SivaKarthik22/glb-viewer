@@ -8,7 +8,7 @@ export default function HomePage(){
     if(!enableCanvas){
         return(
             <div id="pre-canvas">
-              <UploadButton buttonText="Upload GLB/GLTF file" />
+              <UploadButton buttonText="Upload GLB file" />
             </div>
         );
     }

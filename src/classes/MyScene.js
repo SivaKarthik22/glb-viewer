@@ -1,5 +1,5 @@
-import {Engine, Scene, MeshBuilder, HemisphericLight, Vector3, ArcRotateCamera, AppendSceneAsync} from "@babylonjs/core";
-import "@babylonjs/loaders/glTF/2.0"
+import {Engine, Scene, HemisphericLight, Vector3, ArcRotateCamera, AppendSceneAsync} from "@babylonjs/core";
+import "@babylonjs/loaders/glTF"
 
 class MyScene{
     constructor(canvas){
