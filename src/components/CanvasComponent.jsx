@@ -6,16 +6,16 @@ import LoadingComp from "./Loading";
 
 function CanvasComponent() {
   const reactCanvas = useRef(null);
-  const {enableCanvas, file, setLoading, enableToast, disableCanvas, setSceneAnimationNames} = useContext(Context);
+  const {enableCanvas, file, setLoading, enableToast, disableLoading, setSceneAnimationNames} = useContext(Context);
 
   useEffect(() => {
     if(!enableCanvas)
       return;
-    
+
     const { current: canvas } = reactCanvas;
     if (!canvas) return;
 
-    const mySceneObj = new MyScene(canvas);
+    const mySceneObj = MyScene.getInstanceOfMyScene(canvas);
     const scene = mySceneObj.scene;
 
     async function onSceneReadyTasks(){
@@ -31,7 +31,7 @@ function CanvasComponent() {
       })
       .catch(err => {
         enableToast("Error loading file", "error");
-        disableCanvas();
+        disableLoading();
         console.error(err);
       });
     }
@@ -64,7 +64,7 @@ function CanvasComponent() {
         window.removeEventListener("resize", resize);
       }
     };
-  }, [enableCanvas, file]);
+  }, [enableCanvas]);
 
   if(enableCanvas){
     return (

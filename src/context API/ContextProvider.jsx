@@ -8,8 +8,8 @@ export const ContextProvider = ({children}) => {
     const uploadRef = useRef(null);
     
     const [enableCanvas, setEnableCanvas] = useState(false);
-    const [file, setFile] = useState("");
     const [loading, setLoading] = useState(false);
+    let glbFile = "";
     
     const [showToast, setShowToast] = useState(false);
     const [toastMessage, setToastMessage] = useState("");
@@ -24,13 +24,19 @@ export const ContextProvider = ({children}) => {
                 return;
             const reader = new FileReader();
             reader.onload = function(e) {
-                setFile(reader.result);
-                setEnableCanvas(true);
+                glbFile = reader.result; 
+                if(!enableCanvas){
+                    setEnableCanvas(true);
+                    setFirstLoad(true);
+                }
+                else{
+                    importMeshFromFile(glbFile);
+                }
                 setLoading(true);
             };
             reader.readAsDataURL(file);
         }catch(err){
-            disableCanvas();
+            disableLoading();
             enableToast("Error loading file", "error")
             console.error(err);
         }
@@ -48,10 +54,9 @@ export const ContextProvider = ({children}) => {
         setToastType("none");
     }
 
-    function disableCanvas(){
-        setEnableCanvas(false);
+    function disableLoading(){
         setLoading(false);
-        setFile("");
+        glbFile = "";
     }
 
     return (
@@ -61,7 +66,7 @@ export const ContextProvider = ({children}) => {
             uploadRef,
             enableCanvas,
             onFileUpload,
-            file,
+            glbFile,
             loading,
             setLoading,
             showToast,
@@ -69,7 +74,7 @@ export const ContextProvider = ({children}) => {
             forceDisableToast,
             toastMessage,
             toastType,
-            disableCanvas,
+            disableLoading,
             sceneAnimationNames,
             setSceneAnimationNames,
         }}>

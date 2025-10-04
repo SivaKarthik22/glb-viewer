@@ -3,7 +3,7 @@ import { useContext } from "react";
 import { Context } from "../context API/ContextProvider";
 
 function AbsoluteButtons(){
-    const {uploadRef, onFileUpload} = useContext(Context);
+    const {uploadRef, onFileUpload, enableCanvas} = useContext(Context);
 
     return(
         <div id="abs-buttons">
@@ -14,8 +14,10 @@ function AbsoluteButtons(){
                 ref={uploadRef}
                 onChange={onFileUpload}
             />
-            <UploadButton buttonText="Upload"/>
-            <button>Focus</button>
+            {enableCanvas ? <>
+                <UploadButton buttonText="Upload"/>
+                <button>Focus</button>
+            </> : ""}
         </div>
     );
 }
