@@ -3,9 +3,9 @@ import { Context } from "../context API/ContextProvider";
 
 function AnimPlayer(){
     const [sliderValue, setSliderValue] = useState(1);
-    const {sceneAnimationNames} = useContext(Context);
+    const {sceneAnimationNames, enableCanvas} = useContext(Context);
 
-    if(sceneAnimationNames.length > 0){
+    if(enableCanvas && sceneAnimationNames.length > 0){
         return(
             <div id="anim-player">
                 <button>Play</button>
