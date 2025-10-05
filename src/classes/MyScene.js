@@ -10,7 +10,7 @@ class MyScene{
         this.scene = new Scene(this.engine, {});
     }
 
-    async onSceneReady(file){
+    async onSceneReady(){
         this.camera = new ArcRotateCamera("camera1", 0, 0, 10, new Vector3(0, 5, -10), this.scene);
         this.camera.setTarget(Vector3.Zero());
         this.camera.attachControl(this.canvas, true);
@@ -21,9 +21,6 @@ class MyScene{
             skyboxTexture: "./assets/Studio_Softbox_2Umbrellas_cube_specular.env",
             createGround: false,
         });
-
-        await AppendSceneAsync(file, this.scene);
-        console.log(this.scene);
     };
 
     static getInstanceOfMyScene(canvas){
@@ -31,6 +28,17 @@ class MyScene{
             this.instance = new MyScene(canvas);
         }
         return this.instance;
+    }
+
+    async importMeshFromFile(glbFile){
+        await AppendSceneAsync(glbFile, this.scene);
+        console.log(this.scene);
+    }
+
+    async clearSceneMeshes(){
+        this.scene.meshes.forEach(mesh => {
+            mesh.dispose();
+        });
     }
 
     onRender(){

@@ -9,7 +9,7 @@ function AbsoluteButtons(){
         <div id="abs-buttons">
             <input
                 type="file"
-                accept=".glb,.gltf"
+                accept=".glb"
                 className="upload-input"
                 ref={uploadRef}
                 onChange={onFileUpload}

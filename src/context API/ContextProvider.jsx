@@ -1,4 +1,6 @@
 import { createContext, useRef, useState } from "react";
+import MyScene from "../classes/MyScene";
+import "@babylonjs/loaders/glTF";
 
 export const Context = createContext(null);
 
@@ -9,7 +11,8 @@ export const ContextProvider = ({children}) => {
     
     const [enableCanvas, setEnableCanvas] = useState(false);
     const [loading, setLoading] = useState(false);
-    let glbFile = "";
+    const [firstLoad, setFirstLoad] = useState(false);
+    const [glbFile, setGlbFile] = useState("");
     
     const [showToast, setShowToast] = useState(false);
     const [toastMessage, setToastMessage] = useState("");
@@ -24,15 +27,22 @@ export const ContextProvider = ({children}) => {
                 return;
             const reader = new FileReader();
             reader.onload = function(e) {
-                glbFile = reader.result; 
+                setGlbFile(reader.result); 
                 if(!enableCanvas){
                     setEnableCanvas(true);
                     setFirstLoad(true);
                 }
                 else{
-                    importMeshFromFile(glbFile);
+                    setLoading(true);
+                    const mySceneObj = MyScene.getInstanceOfMyScene();
+                    mySceneObj.clearSceneMeshes()
+                    .then(()=>{
+                        mySceneObj.importMeshFromFile(glbFile)
+                    })
+                    .then(()=>{
+                        setLoading(false);
+                    });
                 }
-                setLoading(true);
             };
             reader.readAsDataURL(file);
         }catch(err){
@@ -56,7 +66,15 @@ export const ContextProvider = ({children}) => {
 
     function disableLoading(){
         setLoading(false);
-        glbFile = "";
+        setGlbFile("");
+    }
+
+    function refreshSceneAnimationNames(){
+        const animNames = []
+        MyScene.getInstanceOfMyScene().scene.animationGroups.forEach(anim => {
+          animNames.push(anim.name);
+        });
+        setSceneAnimationNames(animNames);
     }
 
     return (
@@ -77,6 +95,9 @@ export const ContextProvider = ({children}) => {
             disableLoading,
             sceneAnimationNames,
             setSceneAnimationNames,
+            firstLoad,
+            setFirstLoad,
+            refreshSceneAnimationNames,
         }}>
             {children}
         </Context.Provider>

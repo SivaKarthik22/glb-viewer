@@ -1,12 +1,13 @@
 import { useContext, useEffect, useRef } from "react";
 import { } from "@babylonjs/core";
+import "@babylonjs/loaders/glTF";
 import MyScene from "../classes/MyScene";
 import { Context } from "../context API/ContextProvider";
 import LoadingComp from "./Loading";
 
 function CanvasComponent() {
   const reactCanvas = useRef(null);
-  const {enableCanvas, file, setLoading, enableToast, disableLoading, setSceneAnimationNames} = useContext(Context);
+  const {enableCanvas, glbFile, setLoading, enableToast, disableLoading, refreshSceneAnimationNames, firstLoad, setFirstLoad} = useContext(Context);
 
   useEffect(() => {
     if(!enableCanvas)
@@ -19,20 +20,25 @@ function CanvasComponent() {
     const scene = mySceneObj.scene;
 
     async function onSceneReadyTasks(){
-      mySceneObj.onSceneReady(file)
+      mySceneObj.onSceneReady()
       .then(()=>{
-        setLoading(false);
-        
-        const animNames = []
-        scene.animationGroups.forEach(anim => {
-          animNames.push(anim.name);
-        });
-        setSceneAnimationNames(animNames);
+        if(firstLoad){
+          setLoading(true);
+          MyScene.getInstanceOfMyScene().importMeshFromFile(glbFile)
+          .then(()=>{
+            setLoading(false);
+            setFirstLoad(false);
+          });
+        }
       })
       .catch(err => {
         enableToast("Error loading file", "error");
         disableLoading();
+        setFirstLoad(false);
         console.error(err);
+      })
+      .finally(()=>{
+        refreshSceneAnimationNames();
       });
     }
 
