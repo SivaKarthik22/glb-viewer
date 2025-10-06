@@ -28,17 +28,16 @@ function CanvasComponent() {
           .then(()=>{
             setLoading(false);
             setFirstLoad(false);
+            refreshSceneAnimationNames();
+          })
+          .catch(err => {
+            enableToast("Error occurred", "error");
+            disableLoading();
+            setFirstLoad(false);
+            refreshSceneAnimationNames();
+            console.error(err);
           });
         }
-      })
-      .catch(err => {
-        enableToast("Error loading file", "error");
-        disableLoading();
-        setFirstLoad(false);
-        console.error(err);
-      })
-      .finally(()=>{
-        refreshSceneAnimationNames();
       });
     }
 

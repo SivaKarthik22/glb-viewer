@@ -1,4 +1,4 @@
-import {Engine, Scene, Vector3, ArcRotateCamera, AppendSceneAsync} from "@babylonjs/core";
+import {Engine, Scene, Vector3, ArcRotateCamera, AppendSceneAsync, LoadAssetContainerAsync} from "@babylonjs/core";
 import "@babylonjs/loaders/glTF"
 
 class MyScene{
@@ -31,14 +31,18 @@ class MyScene{
     }
 
     async importMeshFromFile(glbFile){
-        await AppendSceneAsync(glbFile, this.scene);
-        console.log(this.scene);
+        //await AppendSceneAsync(glbFile, this.scene);
+        this.container = await LoadAssetContainerAsync(glbFile, this.scene);
+        this.container.addAllToScene();
+        console.log(this.scene.meshes);
     }
 
     async clearSceneMeshes(){
-        this.scene.meshes.forEach(mesh => {
-            mesh.dispose();
-        });
+        if(!this.container)
+            return;
+        this.container.removeAllFromScene();
+        this.container = null;
+        console.log(this.scene.meshes);
     }
 
     onRender(){

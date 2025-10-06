@@ -4,75 +4,91 @@ import "@babylonjs/loaders/glTF";
 
 export const Context = createContext(null);
 
-export const ContextProvider = ({children}) => {
+export const ContextProvider = ({ children }) => {
     const [variableWidth, setVariableWidth] = useState(20);
-    
+
     const uploadRef = useRef(null);
-    
+
     const [enableCanvas, setEnableCanvas] = useState(false);
     const [loading, setLoading] = useState(false);
     const [firstLoad, setFirstLoad] = useState(false);
     const [glbFile, setGlbFile] = useState("");
-    
+
     const [showToast, setShowToast] = useState(false);
     const [toastMessage, setToastMessage] = useState("");
     const [toastType, setToastType] = useState("none");
 
     const [sceneAnimationNames, setSceneAnimationNames] = useState([]);
 
-    function onFileUpload(event){        
-        try{
+    function onFileUpload(event) {
+        try {
             const file = event.target.files[0];
-            if(!file)
+            if (!file)
                 return;
             const reader = new FileReader();
-            reader.onload = function(e) {
-                setGlbFile(reader.result); 
-                if(!enableCanvas){
+            reader.onload = (event) => {
+                setGlbFile(event.target.result);
+                if (!enableCanvas) {
                     setEnableCanvas(true);
                     setFirstLoad(true);
                 }
-                else{
+                else {
                     setLoading(true);
                     const mySceneObj = MyScene.getInstanceOfMyScene();
                     mySceneObj.clearSceneMeshes()
-                    .then(()=>{
-                        mySceneObj.importMeshFromFile(glbFile)
-                    })
-                    .then(()=>{
-                        setLoading(false);
-                    });
+                        .then(() => {
+                            mySceneObj.importMeshFromFile(event.target.result)
+                                .then(() => {
+                                    setLoading(false);
+                                    refreshSceneAnimationNames();
+                                });
+                        })
+                    /* .catch((err)=>{
+                        disableLoading();
+                        enableToast("Error loading file", "error");
+                        refreshSceneAnimationNames();
+                        console.error(err);
+                    }); */
                 }
             };
+            /* reader.onerror = (error) => {
+                disableLoading();
+                setFirstLoad(false);
+                enableToast("Error loading file", "error")
+                refreshSceneAnimationNames();
+                console.error(err);
+            } */
             reader.readAsDataURL(file);
-        }catch(err){
+        }catch (err) {
             disableLoading();
+            setFirstLoad(false);
             enableToast("Error loading file", "error")
+            refreshSceneAnimationNames();
             console.error(err);
         }
     }
 
-    function enableToast(toastMessage, toastType){
+    function enableToast(toastMessage, toastType) {
         setShowToast(true);
         setToastMessage(toastMessage);
         setToastType(toastType);
     }
 
-    function forceDisableToast(){
+    function forceDisableToast() {
         setShowToast(false);
         setToastMessage("");
         setToastType("none");
     }
 
-    function disableLoading(){
+    function disableLoading() {
         setLoading(false);
         setGlbFile("");
     }
 
-    function refreshSceneAnimationNames(){
+    function refreshSceneAnimationNames() {
         const animNames = []
         MyScene.getInstanceOfMyScene().scene.animationGroups.forEach(anim => {
-          animNames.push(anim.name);
+            animNames.push(anim.name);
         });
         setSceneAnimationNames(animNames);
     }
