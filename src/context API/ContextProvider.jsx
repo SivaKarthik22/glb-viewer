@@ -21,51 +21,39 @@ export const ContextProvider = ({ children }) => {
     const [sceneAnimationNames, setSceneAnimationNames] = useState([]);
 
     function onFileUpload(event) {
-        try {
-            const file = event.target.files[0];
-            if (!file)
-                return;
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                setGlbFile(event.target.result);
-                if (!enableCanvas) {
-                    setEnableCanvas(true);
-                    setFirstLoad(true);
-                }
-                else {
+        const file = event.target.files[0];
+        if (!file)
+            return;
+        const reader = new FileReader();
+        reader.onload = async (event) => {
+            setGlbFile(event.target.result);
+            if (!enableCanvas) {
+                setEnableCanvas(true);
+                setFirstLoad(true);
+            }
+            else {
+                try{
                     setLoading(true);
                     const mySceneObj = MyScene.getInstanceOfMyScene();
-                    mySceneObj.clearSceneMeshes()
-                        .then(() => {
-                            mySceneObj.importMeshFromFile(event.target.result)
-                                .then(() => {
-                                    setLoading(false);
-                                    refreshSceneAnimationNames();
-                                });
-                        })
-                    /* .catch((err)=>{
-                        disableLoading();
-                        enableToast("Error loading file", "error");
-                        refreshSceneAnimationNames();
-                        console.error(err);
-                    }); */
+                    await mySceneObj.clearSceneMeshes()
+                    await mySceneObj.importMeshFromFile(event.target.result)
+                    setLoading(false);
+                    refreshSceneAnimationNames();
+                }catch(err){
+                    disableLoading();
+                    enableToast("Error occurred", "error");
+                    refreshSceneAnimationNames();
+                    console.error(err);
                 }
-            };
-            /* reader.onerror = (error) => {
-                disableLoading();
-                setFirstLoad(false);
-                enableToast("Error loading file", "error")
-                refreshSceneAnimationNames();
-                console.error(err);
-            } */
-            reader.readAsDataURL(file);
-        }catch (err) {
+            }
+        };
+        reader.onerror = (error) => {
             disableLoading();
-            setFirstLoad(false);
             enableToast("Error loading file", "error")
             refreshSceneAnimationNames();
-            console.error(err);
+            console.error(error);
         }
+        reader.readAsDataURL(file);
     }
 
     function enableToast(toastMessage, toastType) {

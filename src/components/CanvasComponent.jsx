@@ -19,26 +19,24 @@ function CanvasComponent() {
     const mySceneObj = MyScene.getInstanceOfMyScene(canvas);
     const scene = mySceneObj.scene;
 
-    async function onSceneReadyTasks(){
-      mySceneObj.onSceneReady()
-      .then(()=>{
-        if(firstLoad){
+    async function onSceneReadyTasks() {
+      try {
+        await mySceneObj.onSceneReady()
+        if (firstLoad) {
           setLoading(true);
-          MyScene.getInstanceOfMyScene().importMeshFromFile(glbFile)
-          .then(()=>{
-            setLoading(false);
-            setFirstLoad(false);
-            refreshSceneAnimationNames();
-          })
-          .catch(err => {
-            enableToast("Error occurred", "error");
-            disableLoading();
-            setFirstLoad(false);
-            refreshSceneAnimationNames();
-            console.error(err);
-          });
+          await MyScene.getInstanceOfMyScene().importMeshFromFile(glbFile)
+          setLoading(false);
+          setFirstLoad(false);
+          refreshSceneAnimationNames();
         }
-      });
+      }
+      catch (err) {
+        enableToast("Error occurred", "error");
+        disableLoading();
+        setFirstLoad(false);
+        refreshSceneAnimationNames();
+        console.error(err);
+      }
     }
 
     if (scene.isReady()) {
