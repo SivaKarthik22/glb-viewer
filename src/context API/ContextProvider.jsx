@@ -11,7 +11,6 @@ export const ContextProvider = ({ children }) => {
 
     const [enableCanvas, setEnableCanvas] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [firstLoad, setFirstLoad] = useState(false);
     const [glbFile, setGlbFile] = useState("");
 
     const [showToast, setShowToast] = useState(false);
@@ -25,32 +24,13 @@ export const ContextProvider = ({ children }) => {
         if (!file)
             return;
         const reader = new FileReader();
-        reader.onload = async (event) => {
+        reader.onload = (event) => {
             setGlbFile(event.target.result);
-            if (!enableCanvas) {
-                setEnableCanvas(true);
-                setFirstLoad(true);
-            }
-            else {
-                try{
-                    setLoading(true);
-                    const mySceneObj = MyScene.getInstanceOfMyScene();
-                    await mySceneObj.clearSceneMeshes()
-                    await mySceneObj.importMeshFromFile(event.target.result)
-                    setLoading(false);
-                    refreshSceneAnimationNames();
-                }catch(err){
-                    disableLoading();
-                    enableToast("Error occurred", "error");
-                    refreshSceneAnimationNames();
-                    console.error(err);
-                }
-            }
+            setEnableCanvas(true);
         };
         reader.onerror = (error) => {
-            disableLoading();
+            disableCanvas();
             enableToast("Error loading file", "error")
-            refreshSceneAnimationNames();
             console.error(error);
         }
         reader.readAsDataURL(file);
@@ -68,16 +48,21 @@ export const ContextProvider = ({ children }) => {
         setToastType("none");
     }
 
-    function disableLoading() {
+    function disableCanvas() {
         setLoading(false);
         setGlbFile("");
+        setEnableCanvas(false);
+        refreshSceneAnimationNames();
     }
 
     function refreshSceneAnimationNames() {
         const animNames = []
-        MyScene.getInstanceOfMyScene().scene.animationGroups.forEach(anim => {
-            animNames.push(anim.name);
-        });
+        const mySceneObj = MyScene.getInstanceOfMyScene();
+        if(mySceneObj){
+            mySceneObj.scene.animationGroups.forEach(anim => {
+                animNames.push(anim.name);
+            });
+        }
         setSceneAnimationNames(animNames);
     }
 
@@ -96,11 +81,9 @@ export const ContextProvider = ({ children }) => {
             forceDisableToast,
             toastMessage,
             toastType,
-            disableLoading,
+            disableCanvas,
             sceneAnimationNames,
             setSceneAnimationNames,
-            firstLoad,
-            setFirstLoad,
             refreshSceneAnimationNames,
         }}>
             {children}

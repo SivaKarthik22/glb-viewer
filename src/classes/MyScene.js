@@ -2,7 +2,7 @@ import {Engine, Scene, Vector3, ArcRotateCamera, AppendSceneAsync, LoadAssetCont
 import "@babylonjs/loaders/glTF"
 
 class MyScene{
-    static instance;
+    static instance = null;
 
     constructor(canvas){
         this.canvas = canvas;
@@ -24,7 +24,7 @@ class MyScene{
     };
 
     static getInstanceOfMyScene(canvas){
-        if(!this.instance && canvas){
+        if((!this.instance || this.instance == null) && canvas){
             this.instance = new MyScene(canvas);
         }
         return this.instance;
@@ -43,6 +43,11 @@ class MyScene{
         this.container.removeAllFromScene();
         this.container = null;
         console.log(this.scene.meshes);
+    }
+
+    static disposeInstanceOfMyScene(){
+        if(this.instance)
+            this.instance = null;
     }
 
     onRender(){

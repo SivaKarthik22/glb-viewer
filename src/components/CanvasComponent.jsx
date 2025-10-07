@@ -7,7 +7,7 @@ import LoadingComp from "./Loading";
 
 function CanvasComponent() {
   const reactCanvas = useRef(null);
-  const {enableCanvas, glbFile, setLoading, enableToast, disableLoading, refreshSceneAnimationNames, firstLoad, setFirstLoad} = useContext(Context);
+  const {enableCanvas, glbFile, setLoading, enableToast, disableCanvas, refreshSceneAnimationNames} = useContext(Context);
 
   useEffect(() => {
     if(!enableCanvas)
@@ -21,20 +21,15 @@ function CanvasComponent() {
 
     async function onSceneReadyTasks() {
       try {
-        await mySceneObj.onSceneReady()
-        if (firstLoad) {
-          setLoading(true);
-          await MyScene.getInstanceOfMyScene().importMeshFromFile(glbFile)
-          setLoading(false);
-          setFirstLoad(false);
-          refreshSceneAnimationNames();
-        }
+        setLoading(true);
+        await mySceneObj.onSceneReady();
+        await mySceneObj.importMeshFromFile(glbFile);
+        refreshSceneAnimationNames();
+        setLoading(false);
       }
       catch (err) {
         enableToast("Error occurred", "error");
-        disableLoading();
-        setFirstLoad(false);
-        refreshSceneAnimationNames();
+        disableCanvas();
         console.error(err);
       }
     }
@@ -62,12 +57,12 @@ function CanvasComponent() {
 
     return () => {
       mySceneObj.engine.dispose();
-
+      MyScene.disposeInstanceOfMyScene();
       if (window) {
         window.removeEventListener("resize", resize);
       }
     };
-  }, [enableCanvas]);
+  }, [enableCanvas, glbFile]);
 
   if(enableCanvas){
     return (
