@@ -17,6 +17,8 @@ export const ContextProvider = ({ children }) => {
     const [toastMessage, setToastMessage] = useState("");
     const [toastType, setToastType] = useState("none");
 
+    const [currentEnvironment, setCurrentEnvironmentr] = useState("studio");
+
     const [sceneAnimationNames, setSceneAnimationNames] = useState([]);
 
     function onFileUpload(event) {
@@ -85,6 +87,7 @@ export const ContextProvider = ({ children }) => {
             sceneAnimationNames,
             setSceneAnimationNames,
             refreshSceneAnimationNames,
+            currentEnvironment,
         }}>
             {children}
         </Context.Provider>
