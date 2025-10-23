@@ -15,6 +15,7 @@ class MyScene{
         this.camera.setTarget(Vector3.Zero());
         this.camera.attachControl(this.canvas, true);
         this.camera.minZ = 0;
+        this.camera.lowerRadiusLimit = 0;
     };
 
     static getInstanceOfMyScene(canvas){
@@ -44,27 +45,27 @@ class MyScene{
     }
 
     createEnvironment(environmentName){
-        //1. calculate overall bounding info
+        //calculate overall bounding info
         this.calculateBoundingInfo();
 
         if(this.sceneBoundingInfo){
-            //4. focus the bounding info center
+            //focus the bounding info center
             this.camera.setTarget(this.sceneBoundingInfo.boundingBox.centerWorld);
-            //6. set camera position
+            //set camera position
             this.camera.radius = this.sceneBoundingInfo.boundingSphere.radius * 2.5;
-            //2. set min and max zoom based on bb
-            this.camera.upperRadiusLimit = this.sceneBoundingInfo.boundingSphere.radius * 25;
-            this.camera.lowerRadiusLimit = this.sceneBoundingInfo.boundingSphere.radius;
-            //5. set scroll speed based on bb
-            //this.camera.wheelPrecision = this.sceneBoundingInfo.boundingSphere.radius * 50;
+            //set min and max zoom based on bb
+            this.camera.upperRadiusLimit = this.sceneBoundingInfo.boundingSphere.radius * 25;Z
+            //set scroll speed based on bb
+            this.camera.wheelPrecision = 100 / this.sceneBoundingInfo.boundingSphere.radius;
         }
-        //3. create environment with dimensions based on bounding info
 
+        //create environment with dimensions based on bounding info
         const env = this.scene.createDefaultEnvironment({
             environmentTexture: "./assets/Studio_Softbox_2Umbrellas_cube_specular.env",
             createSkybox: true, 
             skyboxTexture: "./assets/Studio_Softbox_2Umbrellas_cube_specular.env",
             createGround: false,
+            skyboxSize: this.sceneBoundingInfo ? this.sceneBoundingInfo.boundingSphere.radius * 5000 : 5000,
         });
     }
 
