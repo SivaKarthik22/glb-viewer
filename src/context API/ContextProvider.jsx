@@ -17,9 +17,12 @@ export const ContextProvider = ({ children }) => {
     const [toastMessage, setToastMessage] = useState("");
     const [toastType, setToastType] = useState("none");
 
-    const [currentEnvironment, setCurrentEnvironmentr] = useState("studio");
+    const [currentEnvironment, setCurrentEnvironment] = useState("STUDIO");
+    const [currentColor, setCurrentColor] = useState("NONE");
 
     const [sceneAnimationNames, setSceneAnimationNames] = useState([]);
+
+    const [showSidePanel, setShowSidePanel] = useState(true);
 
     function onFileUpload(event) {
         const file = event.target.files[0];
@@ -68,6 +71,10 @@ export const ContextProvider = ({ children }) => {
         setSceneAnimationNames(animNames);
     }
 
+    const toggleSidePanelVisibility = () => {
+        setShowSidePanel(showSidePanel => !showSidePanel);
+    }
+
     return (
         <Context.Provider value={{
             variableWidth,
@@ -88,6 +95,11 @@ export const ContextProvider = ({ children }) => {
             setSceneAnimationNames,
             refreshSceneAnimationNames,
             currentEnvironment,
+            setCurrentEnvironment,
+            showSidePanel,
+            toggleSidePanelVisibility,
+            currentColor,
+            setCurrentColor,
         }}>
             {children}
         </Context.Provider>

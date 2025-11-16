@@ -23,6 +23,7 @@
   flex-direction: column;
   background-color: grey;
   height: 100vh;
+  position: relative;
 }
 
 #panel-head{
@@ -117,5 +118,29 @@
   background-color: blanchedalmond;
   padding: 30px;
   color: black;
+}
+
+.side-panel-toggle{
+  position: absolute;
+  top: 10px;
+  cursor: pointer;
+}
+#enable-side-panel{
+  right: 0;
+}
+#disable-side-panel{
+  left: -30px;
+}
+
+.flex{
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.env-btn.selected{
+  background-color: darkgray;
+  color: black;
+  font-weight: bold;
 }
 

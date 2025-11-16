@@ -7,6 +7,7 @@ import AbsoluteButtons from './components/AbsoluteButtons'
 import { ContextProvider } from './context API/ContextProvider'
 import Toaster from './components/Toaster'
 import HomePage from './components/HomePage'
+import SidePanelToggleButton from './components/SidePanelToggleButton'
 
 function App() {
 
@@ -23,6 +24,7 @@ function App() {
         {/* <Slider /> */}
         <SidePanel />
         <AbsoluteButtons />
+        <SidePanelToggleButton />
         <Toaster/>
       </ContextProvider>
     </>
