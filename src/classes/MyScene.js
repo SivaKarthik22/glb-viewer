@@ -27,7 +27,6 @@ class MyScene{
     }
 
     async importMeshFromFile(glbFile){
-        //await AppendSceneAsync(glbFile, this.scene);
         this.container = await LoadAssetContainerAsync(glbFile, this.scene);
         this.container.addAllToScene();
     }
@@ -46,44 +45,13 @@ class MyScene{
     }
 
     createEnvironment(envName, colorName = "NONE"){
-        //calculate overall bounding info
         this.calculateBoundingInfo();
-
-        if(this.sceneBoundingInfo){
-            //focus the bounding info center
-            this.camera.setTarget(this.sceneBoundingInfo.boundingBox.centerWorld);
-            //set camera position
-            this.camera.radius = this.sceneBoundingInfo.boundingSphere.radius * 2.5;
-            //set min and max zoom based on bb
-            this.camera.upperRadiusLimit = this.sceneBoundingInfo.boundingSphere.radius * 25;
-            //set scroll speed based on bb
-            this.camera.wheelPrecision = 100 / this.sceneBoundingInfo.boundingSphere.radius;
-        }
-
-        const envPath = envName in environmentNames ? environmentNames[envName] : environmentNames["STUDIO"];
-        const skyboxSize = this.sceneBoundingInfo ? this.sceneBoundingInfo.boundingSphere.radius * 5000 : 5000;
-
-        //create environment with dimensions based on bounding info
-
-        this.hdrTexture = new CubeTexture(envPath, this.scene);
-        this.skbox = this.scene.createDefaultSkybox(this.hdrTexture, true, skyboxSize, 0.4);
-
-        const color = Color3.FromHexString(colorName in colorNames ? colorNames[colorName] : colorNames["GREY"]);
-        this.scene.clearColor = color;
-
-        if(colorName in colorNames && colorName != "NONE")
-            this.skbox.setEnabled(false);
-
-        // const env = this.scene.createDefaultEnvironment({
-        //     environmentTexture: envPath,
-        //     createSkybox: true, 
-        //     skyboxTexture: envPath,
-        //     createGround: false,
-        //     skyboxSize: skyboxSize,
-        // });
+        this.configureCamera();
+        this.setSkyBox(envName, colorName);
+        this.setSceneColor(colorName);
     }
 
-    changeEnvironment(envName, colorName = "NONE"){
+    setSkyBox(envName, colorName = "NONE"){
         if(this.hdrTexture)
             this.hdrTexture.dispose();
         if(this.skbox)
@@ -99,7 +67,7 @@ class MyScene{
             this.skbox.setEnabled(false);
     }
 
-    changeSceneColor(colorName){
+    setSceneColor(colorName){
         if(colorName == "NONE"){
             this.skbox.setEnabled(true);
             return;
@@ -134,20 +102,20 @@ class MyScene{
             return;
         
         this.sceneBoundingInfo = new BoundingInfo(spaceMin, spaceMax);
-
-        // const boundingMesh = MeshBuilder.CreateBox("sceneBoundingBox", {
-        //     width: tempBoundingInfo.boundingBox.maximumWorld.x - tempBoundingInfo.boundingBox.minimumWorld.x,
-        //     height: tempBoundingInfo.boundingBox.maximumWorld.y - tempBoundingInfo.boundingBox.minimumWorld.y,
-        //     depth: tempBoundingInfo.boundingBox.maximumWorld.z - tempBoundingInfo.boundingBox.minimumWorld.z,
-        // }, this.scene);
-
-        // boundingMesh.position.copyFrom(tempBoundingInfo.boundingBox.centerWorld)
-        // boundingMesh.visibility = 0;
-        // boundingMesh.isPickable = false;
-        // //boundingMesh.showBoundingBox = true;
-        // this.sceneBoundingBox = boundingMesh;
-
         console.log(this.sceneBoundingInfo);
+    }
+
+    configureCamera(){
+        if(!this.sceneBoundingInfo || !this.camera)
+            return;
+        //focus the bounding info center
+        this.camera.setTarget(this.sceneBoundingInfo.boundingBox.centerWorld);
+        //set camera position
+        this.camera.radius = this.sceneBoundingInfo.boundingSphere.radius * 2.5;
+        //set min and max zoom based on bb
+        this.camera.upperRadiusLimit = this.sceneBoundingInfo.boundingSphere.radius * 25;
+        //set scroll speed based on bb
+        this.camera.wheelPrecision = 100 / this.sceneBoundingInfo.boundingSphere.radius;
     }
 
     onRender(){

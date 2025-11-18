@@ -5,7 +5,7 @@ import { Context } from "../context API/ContextProvider";
 
 export default function SceneSection() {
     const mySceneObj = MyScene.getInstanceOfMyScene(canvas);
-    const {setCurrentEnvironment, currentEnvironment, currentColor, setCurrentColor} = useContext(Context);
+    const {setCurrentEnvironment, currentEnvironment, currentColor, setCurrentColor, wireframe, setWireframe, textureMode, setTextureMode} = useContext(Context);
 
     return (
         <div>
@@ -17,7 +17,7 @@ export default function SceneSection() {
                             className={`env-btn ${envName == currentEnvironment ? "selected" : ""}`}
                             key={index}
                             onClick={()=>{
-                                mySceneObj.changeEnvironment(envName, currentColor);
+                                mySceneObj.setSkyBox(envName, currentColor);
                                 setCurrentEnvironment(envName);
                             }}
                         >{envName}</button>
@@ -33,7 +33,7 @@ export default function SceneSection() {
                             className={`env-btn ${colorName == currentColor ? "selected" : ""}`}
                             key={index}
                             onClick={()=>{
-                                mySceneObj.changeSceneColor(colorName);
+                                mySceneObj.setSceneColor(colorName);
                                 setCurrentColor(colorName);
                             }}
                         >{colorName}</button>
@@ -42,8 +42,9 @@ export default function SceneSection() {
             </div>
 
             <h4>View mode</h4>
+
             <h4>Wireframe view</h4>
-            <h4>XRay view </h4>
+            
             <h4>Stats</h4>
             <div>
                 <ul>

@@ -19,6 +19,8 @@ export const ContextProvider = ({ children }) => {
 
     const [currentEnvironment, setCurrentEnvironment] = useState("STUDIO");
     const [currentColor, setCurrentColor] = useState("NONE");
+    const [wireframe, setWireframe] = useState(false);
+    const [textureMode, setTextureMode] = useState(true);
 
     const [sceneAnimationNames, setSceneAnimationNames] = useState([]);
 
@@ -100,6 +102,10 @@ export const ContextProvider = ({ children }) => {
             toggleSidePanelVisibility,
             currentColor,
             setCurrentColor,
+            wireframe,
+            setWireframe,
+            textureMode,
+            setTextureMode
         }}>
             {children}
         </Context.Provider>
