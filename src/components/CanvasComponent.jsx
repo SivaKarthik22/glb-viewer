@@ -7,7 +7,7 @@ import LoadingComp from "./Loading";
 
 function CanvasComponent() {
   const reactCanvas = useRef(null);
-  const {enableCanvas, glbFile, setLoading, enableToast, disableCanvas, refreshSceneAnimationNames, currentEnvironment, currentColor} = useContext(Context);
+  const {enableCanvas, glbFile, setLoading, enableToast, disableCanvas, refreshSceneAnimationNames, currentEnvironment, currentColor, wireframe, textureMode} = useContext(Context);
 
   useEffect(() => {
     if(!enableCanvas)
@@ -24,7 +24,10 @@ function CanvasComponent() {
         setLoading(true);
         await mySceneObj.onSceneReady();
         await mySceneObj.importMeshFromFile(glbFile);
+        mySceneObj.prepareMeshesForDebugMode();
         mySceneObj.createEnvironment(currentEnvironment, currentColor);
+        mySceneObj.enableDisableWireframeView(wireframe);
+        mySceneObj.enableDisableSolidMode(textureMode);
         refreshSceneAnimationNames();
         setLoading(false);
       }

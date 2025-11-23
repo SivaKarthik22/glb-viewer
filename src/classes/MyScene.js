@@ -1,4 +1,4 @@
-import {Engine, Scene, Vector3, ArcRotateCamera, AppendSceneAsync, LoadAssetContainerAsync, BoundingInfo, MeshBuilder, CubeTexture, Color3} from "@babylonjs/core";
+import {Engine, Scene, Vector3, ArcRotateCamera, LoadAssetContainerAsync, BoundingInfo, CubeTexture, Color3, MeshDebugPluginMaterial, MeshDebugMode} from "@babylonjs/core";
 import "@babylonjs/loaders/glTF"
 import { colorNames, environmentNames } from "../utils/environmentNames";
 
@@ -20,15 +20,62 @@ class MyScene{
     };
 
     static getInstanceOfMyScene(canvas){
-        if((!this.instance || this.instance == null) && canvas){
-            this.instance = new MyScene(canvas);
+        if((!MyScene.instance || MyScene.instance == null) && canvas){
+            MyScene.instance = new MyScene(canvas);
         }
-        return this.instance;
+        return MyScene.instance;
     }
 
     async importMeshFromFile(glbFile){
         this.container = await LoadAssetContainerAsync(glbFile, this.scene);
         this.container.addAllToScene();
+    }
+
+    prepareMeshesForDebugMode(){
+        if(!this.container)
+            return;
+        const sceneMeshes = this.container.meshes;
+        for (const mesh of sceneMeshes) {
+            MeshDebugPluginMaterial.PrepareMeshForTrianglesAndVerticesMode(mesh);
+        }
+        const sceneMaterials = this.container.materials;
+        for (const material of sceneMaterials) {
+            new MeshDebugPluginMaterial(material, {
+                wireframeVerticesColor: Color3.Black(), //param for wireframe
+                wireframeThickness: 0.6, //param for wireframe
+                vertexColor: Color3.Black(), //param for wireframe
+                vertexRadius: 1, //param for wireframe
+                shadedDiffuseColor: Color3.White(), //param for solid view
+                shadedSpecularColor: Color3.White(), //param for solid view
+                shadedSpecularPower: 1, //param for solid view
+            });   
+        }
+    }
+
+    enableDisableWireframeView(enable){
+        if(!this.container)
+            return;
+        const sceneMaterials = this.container.materials;
+        for (const material of sceneMaterials) {
+            const plugin = material.pluginManager?.getPlugin("MeshDebug");
+            if(enable)
+                plugin.mode = MeshDebugMode.TRIANGLES_VERTICES;
+            else
+                plugin.mode = MeshDebugMode.NONE;
+        }
+    }
+
+    enableDisableSolidMode(mode){
+        if(!this.container)
+            return;
+        const sceneMaterials = this.container.materials;
+        for (const material of sceneMaterials) {
+            const plugin = material.pluginManager?.getPlugin("MeshDebug");
+            if(mode == "solid")
+                plugin.multiply = false;
+            else
+                plugin.multiply = true;
+        }
     }
 
     async clearSceneMeshes(){
@@ -40,8 +87,8 @@ class MyScene{
     }
 
     static disposeInstanceOfMyScene(){
-        if(this.instance)
-            this.instance = null;
+        if(MyScene.instance)
+            MyScene.instance = null;
     }
 
     createEnvironment(envName, colorName = "NONE"){
@@ -78,6 +125,9 @@ class MyScene{
     }
 
     calculateBoundingInfo(){
+        if(!this.container)
+            return;
+
         this.sceneBoundingInfo = null;
 
         const sceneMeshes = this.container.meshes.filter(mesh => {
@@ -117,6 +167,13 @@ class MyScene{
         //set scroll speed based on bb
         this.camera.wheelPrecision = 100 / this.sceneBoundingInfo.boundingSphere.radius;
     }
+
+    /* focus(objName){
+        if(!objName){
+            this.camera.setTarget(this.sceneBoundingInfo.boundingBox.centerWorld);
+        }
+        else{}
+    } */
 
     onRender(){
     };
