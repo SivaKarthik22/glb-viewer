@@ -7,7 +7,7 @@ import LoadingComp from "./Loading";
 
 function CanvasComponent() {
   const reactCanvas = useRef(null);
-  const {enableCanvas, glbFile, setLoading, enableToast, disableCanvas, refreshSceneAnimationNames, currentEnvironment, currentColor, wireframe, textureMode} = useContext(Context);
+  const {enableCanvas, glbFile, setLoading, enableToast, disableCanvas, refreshSceneAnimationNames, currentEnvironment, currentColor, wireframe, textureMode, setStatsData} = useContext(Context);
 
   useEffect(() => {
     if(!enableCanvas)
@@ -28,6 +28,7 @@ function CanvasComponent() {
         mySceneObj.createEnvironment(currentEnvironment, currentColor);
         mySceneObj.enableDisableWireframeView(wireframe);
         mySceneObj.enableDisableSolidMode(textureMode);
+        setStatsData(mySceneObj.calculateStats());
         refreshSceneAnimationNames();
         setLoading(false);
       }

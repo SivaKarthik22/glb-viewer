@@ -15,8 +15,9 @@ class MyScene{
         this.camera = new ArcRotateCamera("camera1", 0, 0, 10, new Vector3(0, 5, -10), this.scene);
         this.camera.setTarget(Vector3.Zero());
         this.camera.attachControl(this.canvas, true);
-        this.camera.minZ = 0;
-        this.camera.lowerRadiusLimit = 0;
+        this.camera.minZ = 0.01;
+        this.camera.lowerRadiusLimit = 0.01;
+        this.camera.panningInertia = 0.2;
     };
 
     static getInstanceOfMyScene(canvas){
@@ -174,6 +175,23 @@ class MyScene{
         }
         else{}
     } */
+
+    calculateStats(){
+        if(!this.container)
+            return;
+        
+        let meshCount=0, matCount=0, trisCount=0, vertsCount=0, texsCount=0;
+        meshCount = this.container.meshes.length;
+        matCount = this.container.materials.length;
+        texsCount = this.container.textures.length;
+        
+        this.container.meshes.forEach(mesh => {
+            vertsCount += mesh.getTotalVertices();
+            trisCount += mesh.getTotalIndices()/3;
+        });
+
+        return {meshCount, matCount, trisCount, vertsCount, texsCount};
+    }
 
     onRender(){
     };

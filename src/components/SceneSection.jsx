@@ -5,7 +5,7 @@ import { Context } from "../context API/ContextProvider";
 
 export default function SceneSection() {
     const mySceneObj = MyScene.getInstanceOfMyScene();
-    const {setCurrentEnvironment, currentEnvironment, currentColor, setCurrentColor, wireframe, setWireframe, textureMode, setTextureMode} = useContext(Context);
+    const {setCurrentEnvironment, currentEnvironment, currentColor, setCurrentColor, wireframe, setWireframe, textureMode, setTextureMode, statsData} = useContext(Context);
 
     const handleViewModeChange = event => {
         setTextureMode(event.target.value);
@@ -16,6 +16,21 @@ export default function SceneSection() {
         setWireframe(event.target.checked);
         mySceneObj.enableDisableWireframeView(event.target.checked);
     };
+
+    function formatNumberString(num){
+        if(num == 0) return num;
+
+        let arr = [], count = 0;
+        while(num > 0){
+            if(count > 0 && count%3 === 0)
+                arr.push(',');
+            let digit = num%10;
+            arr.push(digit);
+            count++;
+            num = Math.floor(num/10);
+        }
+        return arr.reverse().join('');
+    }
 
     return (
         <div>
@@ -84,11 +99,11 @@ export default function SceneSection() {
             <h4>Stats</h4>
             <div>
                 <ul>
-                    <li>Total meshes</li>
-                    <li>Total triangles</li>
-                    <li>Total vertices</li>
-                    <li>Total Materials</li>
-                    <li>Total Textures</li>
+                    <li>Total meshes: {formatNumberString(statsData.meshCount)}</li>
+                    <li>Total triangles: {formatNumberString(statsData.trisCount)}</li>
+                    <li>Total vertices: {formatNumberString(statsData.vertsCount)}</li>
+                    <li>Total Materials: {formatNumberString(statsData.matCount)}</li>
+                    <li>Total Textures: {formatNumberString(statsData.texsCount)}</li>
                 </ul>
             </div>
         </div>

@@ -21,6 +21,13 @@ export const ContextProvider = ({ children }) => {
     const [currentColor, setCurrentColor] = useState("NONE");
     const [wireframe, setWireframe] = useState(false);
     const [textureMode, setTextureMode] = useState("textured");
+    const [statsData, setStatsData] = useState({
+        meshCount: 0,
+        matCount: 0,
+        trisCount: 0,
+        vertsCount: 0,
+        texsCount: 0,
+    });
 
     const [sceneAnimationNames, setSceneAnimationNames] = useState([]);
 
@@ -105,7 +112,9 @@ export const ContextProvider = ({ children }) => {
             wireframe,
             setWireframe,
             textureMode,
-            setTextureMode
+            setTextureMode,
+            statsData,
+            setStatsData,
         }}>
             {children}
         </Context.Provider>
