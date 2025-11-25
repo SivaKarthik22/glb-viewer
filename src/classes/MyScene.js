@@ -1,4 +1,4 @@
-import {Engine, Scene, Vector3, ArcRotateCamera, LoadAssetContainerAsync, BoundingInfo, CubeTexture, Color3, MeshDebugPluginMaterial, MeshDebugMode} from "@babylonjs/core";
+import {Engine, Scene, Vector3, ArcRotateCamera, LoadAssetContainerAsync, BoundingInfo, CubeTexture, Color3, MeshDebugPluginMaterial, MeshDebugMode, PointerEventTypes} from "@babylonjs/core";
 import "@babylonjs/loaders/glTF"
 import { colorNames, environmentNames } from "../utils/environmentNames";
 
@@ -169,12 +169,17 @@ class MyScene{
         this.camera.wheelPrecision = 100 / this.sceneBoundingInfo.boundingSphere.radius;
     }
 
-    /* focus(objName){
-        if(!objName){
-            this.camera.setTarget(this.sceneBoundingInfo.boundingBox.centerWorld);
+    focus(meshUId){
+        if(!meshUId){
+            this.camera.setTarget(this.sceneBoundingInfo.boundingSphere.centerWorld.clone());
+            this.camera.radius = this.sceneBoundingInfo.boundingSphere.radius * 2.5;
         }
-        else{}
-    } */
+        else{
+            const mesh = this.scene.getMeshByUniqueId(meshUId);
+            this.camera.setTarget(mesh.getBoundingInfo().boundingBox.centerWorld.clone());
+            this.camera.radius = mesh.getBoundingInfo().boundingSphere.radius * 2.5;
+        }
+    }
 
     calculateStats(){
         if(!this.container)

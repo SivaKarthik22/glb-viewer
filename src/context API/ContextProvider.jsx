@@ -33,6 +33,8 @@ export const ContextProvider = ({ children }) => {
 
     const [showSidePanel, setShowSidePanel] = useState(true);
 
+    const [selectedMesh, setSelectedMesh] = useState(null);
+
     function onFileUpload(event) {
         const file = event.target.files[0];
         if (!file)
@@ -115,6 +117,8 @@ export const ContextProvider = ({ children }) => {
             setTextureMode,
             statsData,
             setStatsData,
+            selectedMesh,
+            setSelectedMesh,
         }}>
             {children}
         </Context.Provider>

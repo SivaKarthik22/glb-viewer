@@ -4,7 +4,7 @@ import SceneSection from "./SceneSection";
 
 function SidePanel() {
     const { variableWidth, enableCanvas, showSidePanel, toggleSidePanelVisibility } = useContext(Context);
-    const [currentSection, setCurrentSection] = useState(1);
+    const [currentSection, setCurrentSection] = useState("Scene");
 
     const sectionBtnClick = event =>{
         setCurrentSection(event.target.innerText);
@@ -14,7 +14,7 @@ function SidePanel() {
         return (
             <div id="side-panel" style={{ width: `${variableWidth}%` }}>
                 <button
-                    class="side-panel-toggle"
+                    className="side-panel-toggle"
                     id="disable-side-panel"
                     onClick={toggleSidePanelVisibility}
                 >{">>"}</button>
@@ -23,10 +23,10 @@ function SidePanel() {
                         className="section-heading"
                         onClick={sectionBtnClick}
                     >Mesh</button>
-                    <button
+                    {/* <button
                         className="section-heading"
                         onClick={sectionBtnClick}
-                    >Material</button>
+                    >Material</button> */}
                     <button 
                         className="section-heading"
                         onClick={sectionBtnClick}
@@ -34,7 +34,7 @@ function SidePanel() {
                 </div>
                 <div id="panel-body">
                     {currentSection === "Mesh" && <MeshSection />}
-                    {currentSection === "Material" && <MaterialSection />}
+                    {/*currentSection === "Material" && <MaterialSection />*/}
                     {currentSection === "Scene" && <SceneSection />}
                 </div>
             </div>

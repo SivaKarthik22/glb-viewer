@@ -1,9 +1,15 @@
 import UploadButton from "./UploadButton";
 import { useContext } from "react";
 import { Context } from "../context API/ContextProvider";
+import MyScene from "../classes/MyScene";
 
 function AbsoluteButtons(){
-    const {uploadRef, onFileUpload, enableCanvas} = useContext(Context);
+    const {uploadRef, onFileUpload, enableCanvas, selectedMesh} = useContext(Context);
+    const mySceneObj = MyScene.getInstanceOfMyScene();
+
+    const handleFocusBtnClick = () =>{
+        mySceneObj.focus(selectedMesh);
+    }
 
     return(
         <div id="abs-buttons">
@@ -16,7 +22,7 @@ function AbsoluteButtons(){
             />
             {enableCanvas ? <>
                 <UploadButton buttonText="Upload"/>
-                <button>Focus</button>
+                <button onClick={handleFocusBtnClick}>Focus</button>
             </> : ""}
         </div>
     );
