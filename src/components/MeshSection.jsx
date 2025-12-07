@@ -1,10 +1,10 @@
 import { Mesh, TransformNode } from "@babylonjs/core";
 import MyScene from "../classes/MyScene";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { Context } from "../context API/ContextProvider";
 
 export default function MeshSection(){
-    const {loading, enableHighlight, setEnableHighlight} = useContext(Context);
+    const {loading, enableHighlight, setEnableHighlight, selectedMesh} = useContext(Context);
     const mySceneObj = MyScene.getInstanceOfMyScene();
     
     function displaySceneHeirarchy(rootMeshName){
@@ -24,7 +24,10 @@ export default function MeshSection(){
     }
 
     const enableOrDisableHighlight = (event)=>{
-        setEnableHighlight(event.target.checked);
+        const checked = event.target.checked;
+        setEnableHighlight(checked);
+        mySceneObj.setupEffectLayer(checked);
+        mySceneObj.updateMeshHighlight(selectedMesh);
     }
 
     return(

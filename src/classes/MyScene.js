@@ -1,4 +1,4 @@
-import {Engine, Scene, Vector3, ArcRotateCamera, LoadAssetContainerAsync, BoundingInfo, CubeTexture, Color3, MeshDebugPluginMaterial, MeshDebugMode, PointerEventTypes, HighlightLayer} from "@babylonjs/core";
+import {Engine, Scene, Vector3, ArcRotateCamera, LoadAssetContainerAsync, BoundingInfo, CubeTexture, Color3, MeshDebugPluginMaterial, MeshDebugMode, HighlightLayer} from "@babylonjs/core";
 import "@babylonjs/loaders/glTF"
 import { colorNames, environmentNames } from "../utils/environmentNames";
 
@@ -11,7 +11,6 @@ class MyScene{
         this.scene = new Scene(this.engine, {});
         this.camera = new ArcRotateCamera("camera1", 0, 0, 10, new Vector3(0, 5, -10), this.scene);
         this.camera.attachControl(this.canvas, true);
-        this.hlLayer = new HighlightLayer("hlLayer", this.scene);
     }
 
     static getInstanceOfMyScene(canvas){
@@ -197,6 +196,28 @@ class MyScene{
         });
 
         return {meshCount, matCount, trisCount, vertsCount, texsCount};
+    }
+
+    setupEffectLayer(enableHighlight = true){
+        if(this.hlLayer){
+            this.hlLayer.dispose();
+            this.hlLayer = null;
+        }
+        if(enableHighlight){
+            this.hlLayer = new HighlightLayer("hlLayer", this.scene);
+            this.hlLayer.innerGlow = false;
+        }
+    }
+
+    updateMeshHighlight(meshUId = null){
+        if(!this.hlLayer)
+            return;
+        this.hlLayer.removeAllMeshes();
+        if(!meshUId)
+            return;
+        const mesh = this.scene.getMeshByUniqueId(meshUId);
+        if(mesh)
+            this.hlLayer.addMesh(mesh, Color3.FromHexString("#FFEE91"));
     }
 
     onRender(){

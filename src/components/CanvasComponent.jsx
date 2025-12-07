@@ -8,7 +8,7 @@ import "babylonjs-inspector";
 
 function CanvasComponent() {
   const reactCanvas = useRef(null);
-  const { enableCanvas, glbFile, setLoading, enableToast, disableCanvas, refreshSceneAnimationNames, currentEnvironment, currentColor, wireframe, textureMode, setStatsData, setSelectedMesh } = useContext(Context);
+  const { enableCanvas, glbFile, setLoading, enableToast, disableCanvas, refreshSceneAnimationNames, currentEnvironment, currentColor, wireframe, textureMode, setStatsData, setSelectedMesh, enableHighlight } = useContext(Context);
 
   useEffect(() => {
     if (!enableCanvas)
@@ -29,6 +29,7 @@ function CanvasComponent() {
         mySceneObj.createEnvironment(currentEnvironment, currentColor);
         mySceneObj.enableDisableWireframeView(wireframe);
         mySceneObj.enableDisableSolidMode(textureMode);
+        mySceneObj.setupEffectLayer(enableHighlight);
         setStatsData(mySceneObj.calculateStats());
         refreshSceneAnimationNames();
         setSceneClickObservable();
@@ -45,18 +46,19 @@ function CanvasComponent() {
       scene.onPointerObservable.add(pointerInfo => {
         if (pointerInfo.type !== PointerEventTypes.POINTERTAP)
           return;
-        console.log(pointerInfo);
         const pickResult = pointerInfo.pickInfo;
         if (pickResult?.hit && pickResult.pickedMesh){
           const pickedMesh = pickResult.pickedMesh;
           for (const mesh of mySceneObj.container.meshes) {
             if (pickedMesh.uniqueId == mesh.uniqueId) {
               setSelectedMesh(mesh.uniqueId);
+              mySceneObj.updateMeshHighlight(mesh.uniqueId);
               return;
             }
           }
         }
         setSelectedMesh(null);
+        mySceneObj.updateMeshHighlight();
       });
     }
 
