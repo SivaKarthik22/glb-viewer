@@ -32,7 +32,7 @@
 }
 
 #panel-body{
-  flex: 1;
+  height: calc(100% - 50px);
 }
 
 .section-heading{
@@ -142,5 +142,16 @@
   background-color: darkgray;
   color: black;
   font-weight: bold;
+}
+
+#heirarchy-container{
+  overflow-x: hidden;
+  overflow-y: auto;
+  width: 100%;
+  height: calc(100% - 30px)
+}
+
+#mesh-section{
+  height: 100%;
 }
 

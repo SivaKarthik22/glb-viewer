@@ -5,7 +5,7 @@ import { Context } from "../context API/ContextProvider";
 
 export default function SceneSection() {
     const mySceneObj = MyScene.getInstanceOfMyScene();
-    const {setCurrentEnvironment, currentEnvironment, currentColor, setCurrentColor, wireframe, setWireframe, textureMode, setTextureMode, statsData} = useContext(Context);
+    const {setCurrentEnvironment, currentEnvironment, currentColor, setCurrentColor, wireframe, setWireframe, textureMode, setTextureMode, statsData, loading} = useContext(Context);
 
     const handleViewModeChange = event => {
         setTextureMode(event.target.value);
@@ -98,13 +98,15 @@ export default function SceneSection() {
             
             <h4>Stats</h4>
             <div>
-                <ul>
-                    <li>Total meshes: {formatNumberString(statsData.meshCount)}</li>
-                    <li>Total triangles: {formatNumberString(statsData.trisCount)}</li>
-                    <li>Total vertices: {formatNumberString(statsData.vertsCount)}</li>
-                    <li>Total Materials: {formatNumberString(statsData.matCount)}</li>
-                    <li>Total Textures: {formatNumberString(statsData.texsCount)}</li>
-                </ul>
+                {loading ? <p>Loading...</p> : 
+                    <ul>
+                        <li>Total meshes: {formatNumberString(statsData.meshCount)}</li>
+                        <li>Total triangles: {formatNumberString(statsData.trisCount)}</li>
+                        <li>Total vertices: {formatNumberString(statsData.vertsCount)}</li>
+                        <li>Total Materials: {formatNumberString(statsData.matCount)}</li>
+                        <li>Total Textures: {formatNumberString(statsData.texsCount)}</li>
+                    </ul>
+                }
             </div>
         </div>
     );

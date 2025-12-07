@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import { Context } from "../context API/ContextProvider";
 import SceneSection from "./SceneSection";
+import MeshSection from "./MeshSection";
 
 function SidePanel() {
     const { variableWidth, enableCanvas, showSidePanel, toggleSidePanelVisibility } = useContext(Context);

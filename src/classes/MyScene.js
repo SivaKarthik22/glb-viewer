@@ -1,4 +1,4 @@
-import {Engine, Scene, Vector3, ArcRotateCamera, LoadAssetContainerAsync, BoundingInfo, CubeTexture, Color3, MeshDebugPluginMaterial, MeshDebugMode, PointerEventTypes} from "@babylonjs/core";
+import {Engine, Scene, Vector3, ArcRotateCamera, LoadAssetContainerAsync, BoundingInfo, CubeTexture, Color3, MeshDebugPluginMaterial, MeshDebugMode, PointerEventTypes, HighlightLayer} from "@babylonjs/core";
 import "@babylonjs/loaders/glTF"
 import { colorNames, environmentNames } from "../utils/environmentNames";
 
@@ -9,16 +9,10 @@ class MyScene{
         this.canvas = canvas;
         this.engine = new Engine(this.canvas, true, {}, true);
         this.scene = new Scene(this.engine, {});
-    }
-
-    async onSceneReady(){
         this.camera = new ArcRotateCamera("camera1", 0, 0, 10, new Vector3(0, 5, -10), this.scene);
-        this.camera.setTarget(Vector3.Zero());
         this.camera.attachControl(this.canvas, true);
-        this.camera.minZ = 0.01;
-        this.camera.lowerRadiusLimit = 0.01;
-        this.camera.panningInertia = 0.2;
-    };
+        this.hlLayer = new HighlightLayer("hlLayer", this.scene);
+    }
 
     static getInstanceOfMyScene(canvas){
         if((!MyScene.instance || MyScene.instance == null) && canvas){
@@ -88,8 +82,10 @@ class MyScene{
     }
 
     static disposeInstanceOfMyScene(){
-        if(MyScene.instance)
+        if(MyScene.instance){
+            MyScene.instance.scene.dispose();
             MyScene.instance = null;
+        }
     }
 
     createEnvironment(envName, colorName = "NONE"){
@@ -159,6 +155,7 @@ class MyScene{
     configureCamera(){
         if(!this.sceneBoundingInfo || !this.camera)
             return;
+
         //focus the bounding info center
         this.camera.setTarget(this.sceneBoundingInfo.boundingBox.centerWorld);
         //set camera position
@@ -167,6 +164,10 @@ class MyScene{
         this.camera.upperRadiusLimit = this.sceneBoundingInfo.boundingSphere.radius * 25;
         //set scroll speed based on bb
         this.camera.wheelPrecision = 100 / this.sceneBoundingInfo.boundingSphere.radius;
+
+        this.camera.minZ = 0.01;
+        this.camera.lowerRadiusLimit = 0.01;
+        this.camera.panningInertia = 0.2;
     }
 
     focus(meshUId){

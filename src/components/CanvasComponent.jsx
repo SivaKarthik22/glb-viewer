@@ -24,7 +24,6 @@ function CanvasComponent() {
     async function onSceneReadyTasks() {
       try {
         setLoading(true);
-        await mySceneObj.onSceneReady();
         await mySceneObj.importMeshFromFile(glbFile);
         mySceneObj.prepareMeshesForDebugMode();
         mySceneObj.createEnvironment(currentEnvironment, currentColor);
