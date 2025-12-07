@@ -138,7 +138,7 @@
   flex-wrap: wrap;
 }
 
-.env-btn.selected{
+.selected{
   background-color: darkgray;
   color: black;
   font-weight: bold;
@@ -148,10 +148,46 @@
   overflow-x: hidden;
   overflow-y: auto;
   width: 100%;
-  height: calc(100% - 30px)
+  height: calc(100% - 50px)
 }
 
 #mesh-section{
   height: 100%;
 }
 
+.unit-name{
+  cursor: pointer;
+}
+
+.no-break{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.unit-list{
+  list-style-type: none;
+  padding-left: 20px;
+}
+
+.unit-list:nth-child(1){
+  padding-left: 0;
+}
+
+.unit{
+  display: flex;
+  align-items: center;
+  justify-content: start;
+}
+
+.unfold-btn{
+  cursor: pointer;
+}
+
+.details-btn{
+  cursor: pointer;
+}
+
+.details-list{
+  list-style-type: none;
+}

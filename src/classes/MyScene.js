@@ -179,6 +179,7 @@ class MyScene{
             this.camera.setTarget(mesh.getBoundingInfo().boundingBox.centerWorld.clone());
             this.camera.radius = mesh.getBoundingInfo().boundingSphere.radius * 2.5;
         }
+        //pending: handle case for transform node
     }
 
     calculateStats(){
@@ -218,6 +219,8 @@ class MyScene{
         const mesh = this.scene.getMeshByUniqueId(meshUId);
         if(mesh)
             this.hlLayer.addMesh(mesh, Color3.FromHexString("#FFEE91"));
+        
+        //pending: handle case for transform node
     }
 
     onRender(){

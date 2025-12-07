@@ -21,7 +21,7 @@ function SidePanel() {
                 >{">>"}</button>
                 <div id="panel-head">
                     <button
-                        className="section-heading"
+                        className= {`${currentSection === "Mesh" ? "selected " : ""}section-heading`}
                         onClick={sectionBtnClick}
                     >Mesh</button>
                     {/* <button
@@ -29,7 +29,7 @@ function SidePanel() {
                         onClick={sectionBtnClick}
                     >Material</button> */}
                     <button 
-                        className="section-heading"
+                        className= {`${currentSection === "Scene" ? "selected " : ""}section-heading`}
                         onClick={sectionBtnClick}
                     >Scene</button>
                 </div>
