@@ -10,3 +10,8 @@ things to update:
 -add mesh hide/unhide feature
 -mesh isolation mode feature - show any mesh that you click in outliner in isolation mode
 -animation player
+
+ideas:
+-calculate transform node bounding info data at start. then use it during focus
+-use usereducer to store state data of each mesh - fold/unfold, hide/unhide, show/hide-details
+-use another cam and layer mask for isolation mode
