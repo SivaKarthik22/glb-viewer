@@ -34,7 +34,7 @@ export const ContextProvider = ({ children }) => {
     const [showSidePanel, setShowSidePanel] = useState(true);
 
     const [selectedMesh, setSelectedMesh] = useState(null);
-    const [enableHighlight, setEnableHighlight] = useState(true);
+    const [enableHighlight, setEnableHighlight] = useState(false);
 
     function onFileUpload(event) {
         const file = event.target.files[0];

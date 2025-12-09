@@ -35,10 +35,11 @@ class MyScene{
         const sceneMaterials = this.container.materials;
         for (const material of sceneMaterials) {
             new MeshDebugPluginMaterial(material, {
-                wireframeVerticesColor: Color3.Black(), //param for wireframe
+                //wireframeVerticesColor: Color3.Black(), //param for wireframe
                 wireframeThickness: 0.6, //param for wireframe
-                vertexColor: Color3.Black(), //param for wireframe
-                vertexRadius: 1, //param for wireframe
+                wireframeTrianglesColor: Color3.Black(),
+                //vertexColor: Color3.Black(), //param for wireframe
+                //vertexRadius: 1, //param for wireframe
                 shadedDiffuseColor: Color3.White(), //param for solid view
                 shadedSpecularColor: Color3.White(), //param for solid view
                 shadedSpecularPower: 1, //param for solid view
@@ -53,7 +54,7 @@ class MyScene{
         for (const material of sceneMaterials) {
             const plugin = material.pluginManager?.getPlugin("MeshDebug");
             if(enable)
-                plugin.mode = MeshDebugMode.TRIANGLES_VERTICES;
+                plugin.mode = MeshDebugMode.TRIANGLES;
             else
                 plugin.mode = MeshDebugMode.NONE;
         }
@@ -101,7 +102,7 @@ class MyScene{
             this.skbox.dispose();
 
         const envPath = envName in environmentNames ? environmentNames[envName] : environmentNames["STUDIO"];
-        const skyboxSize = this.sceneBoundingInfo ? this.sceneBoundingInfo.boundingSphere.radius * 5000 : 5000;
+        const skyboxSize = this.sceneBoundingInfo ? this.sceneBoundingInfo.boundingSphere.radiusWorld * 5000 : 5000;
 
         this.hdrTexture = new CubeTexture(envPath, this.scene);
         this.skbox = this.scene.createDefaultSkybox(this.hdrTexture, true, skyboxSize, 0.4);
@@ -158,11 +159,11 @@ class MyScene{
         //focus the bounding info center
         this.camera.setTarget(this.sceneBoundingInfo.boundingBox.centerWorld);
         //set camera position
-        this.camera.radius = this.sceneBoundingInfo.boundingSphere.radius * 2.5;
+        this.camera.radius = this.sceneBoundingInfo.boundingSphere.radiusWorld * 2.5;
         //set min and max zoom based on bb
-        this.camera.upperRadiusLimit = this.sceneBoundingInfo.boundingSphere.radius * 25;
+        this.camera.upperRadiusLimit = this.sceneBoundingInfo.boundingSphere.radiusWorld * 25;
         //set scroll speed based on bb
-        this.camera.wheelPrecision = 100 / this.sceneBoundingInfo.boundingSphere.radius;
+        this.camera.wheelPrecision = 100 / this.sceneBoundingInfo.boundingSphere.radiusWorld;
 
         this.camera.minZ = 0.01;
         this.camera.lowerRadiusLimit = 0.01;
@@ -172,12 +173,12 @@ class MyScene{
     focus(meshUId){
         if(!meshUId){
             this.camera.setTarget(this.sceneBoundingInfo.boundingSphere.centerWorld.clone());
-            this.camera.radius = this.sceneBoundingInfo.boundingSphere.radius * 2.5;
+            this.camera.radius = this.sceneBoundingInfo.boundingSphere.radiusWorld * 2.5;
         }
         else{
             const mesh = this.scene.getMeshByUniqueId(meshUId);
             this.camera.setTarget(mesh.getBoundingInfo().boundingBox.centerWorld.clone());
-            this.camera.radius = mesh.getBoundingInfo().boundingSphere.radius * 2.5;
+            this.camera.radius = mesh.getBoundingInfo().boundingSphere.radiusWorld * 2.5;
         }
         //pending: handle case for transform node
     }
