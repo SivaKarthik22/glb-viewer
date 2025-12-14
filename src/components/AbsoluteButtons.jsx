@@ -3,15 +3,21 @@ import { useContext } from "react";
 import { Context } from "../context API/ContextProvider";
 import MyScene from "../classes/MyScene";
 
-function AbsoluteButtons(){
-    const {uploadRef, onFileUpload, enableCanvas, selectedMesh} = useContext(Context);
+function AbsoluteButtons() {
+    const { uploadRef, onFileUpload, enableCanvas, selectedMesh, heirarchyCompRef, autoFocus } = useContext(Context);
     const mySceneObj = MyScene.getInstanceOfMyScene();
 
-    const handleFocusBtnClick = () =>{
+    const handleFocusBtnClick = () => {
         mySceneObj.focus(selectedMesh);
+        if (autoFocus && heirarchyCompRef.current) {
+            heirarchyCompRef.current.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+        }
     }
 
-    return(
+    return (
         <div id="abs-buttons">
             <input
                 type="file"
@@ -21,7 +27,7 @@ function AbsoluteButtons(){
                 onChange={onFileUpload}
             />
             {enableCanvas ? <>
-                <UploadButton buttonText="Upload"/>
+                <UploadButton buttonText="Upload" />
                 <button onClick={handleFocusBtnClick}>Focus</button>
             </> : ""}
         </div>

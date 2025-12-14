@@ -8,7 +8,47 @@ import "babylonjs-inspector";
 
 function CanvasComponent() {
   const reactCanvas = useRef(null);
-  const { enableCanvas, glbFile, setLoading, enableToast, disableCanvas, refreshSceneAnimationNames, currentEnvironment, currentColor, wireframe, textureMode, setStatsData, setSelectedMesh, enableHighlight } = useContext(Context);
+  const { enableCanvas, glbFile, setLoading, enableToast, disableCanvas, refreshSceneAnimationNames, currentEnvironment, currentColor, wireframe, textureMode, setStatsData, enableHighlight, setIsolationMode, updateSelection } = useContext(Context);
+
+  function setSceneClickObservable(mySceneObj) {
+    mySceneObj.scene.onPointerObservable.add(pointerInfo => {
+      if (pointerInfo.type !== PointerEventTypes.POINTERTAP)
+        return;
+      let curSelection = null
+      const pickResult = pointerInfo.pickInfo;
+      if (pickResult?.hit && pickResult.pickedMesh) {
+        const pickedMesh = pickResult.pickedMesh;
+        for (const mesh of mySceneObj.container.meshes) {
+          if (pickedMesh.uniqueId == mesh.uniqueId)
+            curSelection = mesh.uniqueId;
+        }
+      }
+      updateSelection(curSelection);
+    });
+  }
+
+  async function onSceneReadyTasks(mySceneObj) {
+    try {
+      setLoading(true);
+      await mySceneObj.importMeshFromFile(glbFile);
+      mySceneObj.prepareMeshesForDebugMode();
+      mySceneObj.createEnvironment(currentEnvironment, currentColor);
+      mySceneObj.setBoundingInfoForAllTransformNodes();
+      mySceneObj.enableDisableWireframeView(wireframe);
+      mySceneObj.enableDisableSolidMode(textureMode);
+      mySceneObj.setupEffectLayer(enableHighlight);
+      setIsolationMode(false);
+      setStatsData(mySceneObj.calculateStats());
+      refreshSceneAnimationNames();
+      setSceneClickObservable(mySceneObj);
+      setLoading(false);
+    }
+    catch (err) {
+      enableToast("Error occurred", "error");
+      disableCanvas();
+      console.error(err);
+    }
+  }
 
   useEffect(() => {
     if (!enableCanvas)
@@ -21,52 +61,11 @@ function CanvasComponent() {
     const mySceneObj = MyScene.getInstanceOfMyScene(canvas);
     const scene = mySceneObj.scene;
 
-    async function onSceneReadyTasks() {
-      try {
-        setLoading(true);
-        await mySceneObj.importMeshFromFile(glbFile);
-        mySceneObj.prepareMeshesForDebugMode();
-        mySceneObj.createEnvironment(currentEnvironment, currentColor);
-        mySceneObj.enableDisableWireframeView(wireframe);
-        mySceneObj.enableDisableSolidMode(textureMode);
-        mySceneObj.setupEffectLayer(enableHighlight);
-        setStatsData(mySceneObj.calculateStats());
-        refreshSceneAnimationNames();
-        setSceneClickObservable();
-        setLoading(false);
-      }
-      catch (err) {
-        enableToast("Error occurred", "error");
-        disableCanvas();
-        console.error(err);
-      }
-    }
-
-    function setSceneClickObservable() {
-      scene.onPointerObservable.add(pointerInfo => {
-        if (pointerInfo.type !== PointerEventTypes.POINTERTAP)
-          return;
-        const pickResult = pointerInfo.pickInfo;
-        if (pickResult?.hit && pickResult.pickedMesh){
-          const pickedMesh = pickResult.pickedMesh;
-          for (const mesh of mySceneObj.container.meshes) {
-            if (pickedMesh.uniqueId == mesh.uniqueId) {
-              setSelectedMesh(mesh.uniqueId);
-              mySceneObj.updateMeshHighlight(mesh.uniqueId);
-              return;
-            }
-          }
-        }
-        setSelectedMesh(null);
-        mySceneObj.updateMeshHighlight();
-      });
-    }
-
     if (scene.isReady()) {
-      onSceneReadyTasks();
+      onSceneReadyTasks(mySceneObj);
     } else {
       scene.onReadyObservable.addOnce(() => {
-        onSceneReadyTasks();
+        onSceneReadyTasks(mySceneObj);
       });
     }
 

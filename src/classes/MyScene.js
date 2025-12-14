@@ -1,6 +1,6 @@
-import {Engine, Scene, Vector3, ArcRotateCamera, LoadAssetContainerAsync, BoundingInfo, CubeTexture, Color3, MeshDebugPluginMaterial, MeshDebugMode, HighlightLayer} from "@babylonjs/core";
+import {Engine, Scene, Vector3, ArcRotateCamera, LoadAssetContainerAsync, BoundingInfo, CubeTexture, Color3, MeshDebugPluginMaterial, MeshDebugMode, HighlightLayer, Mesh} from "@babylonjs/core";
 import "@babylonjs/loaders/glTF"
-import { colorNames, environmentNames } from "../utils/environmentNames";
+import { colorNames, defaultLayerMask, environmentNames, isolationModeLayerMask } from "../utils/environmentNames";
 
 class MyScene{
     static instance = null;
@@ -21,7 +21,7 @@ class MyScene{
     }
 
     async importMeshFromFile(glbFile){
-        this.container = await LoadAssetContainerAsync(glbFile, this.scene);
+        this.container = await LoadAssetContainerAsync(glbFile);
         this.container.addAllToScene();
     }
 
@@ -106,6 +106,7 @@ class MyScene{
 
         this.hdrTexture = new CubeTexture(envPath, this.scene);
         this.skbox = this.scene.createDefaultSkybox(this.hdrTexture, true, skyboxSize, 0.4);
+        this.skbox.layerMask = 0xFFFFFFFF;
 
         if(colorName in colorNames && colorName != "NONE")
             this.skbox.setEnabled(false);
@@ -149,7 +150,6 @@ class MyScene{
             return;
         
         this.sceneBoundingInfo = new BoundingInfo(spaceMin, spaceMax);
-        console.log(this.sceneBoundingInfo);
     }
 
     configureCamera(){
@@ -168,6 +168,7 @@ class MyScene{
         this.camera.minZ = 0.01;
         this.camera.lowerRadiusLimit = 0.01;
         this.camera.panningInertia = 0.2;
+        this.camera.panningSensibility = 2000;
     }
 
     focus(meshUId){
@@ -176,11 +177,14 @@ class MyScene{
             this.camera.radius = this.sceneBoundingInfo.boundingSphere.radiusWorld * 2.5;
         }
         else{
-            const mesh = this.scene.getMeshByUniqueId(meshUId);
-            this.camera.setTarget(mesh.getBoundingInfo().boundingBox.centerWorld.clone());
-            this.camera.radius = mesh.getBoundingInfo().boundingSphere.radiusWorld * 2.5;
+            const node = this.getNodeByUniqueId(meshUId);
+            if(!node) return;
+
+            const boundingInfo = (node instanceof Mesh) ? node.getBoundingInfo() : node.artificialBoundingInfo;
+            if(!boundingInfo) return;
+            this.camera.setTarget(boundingInfo.boundingBox.centerWorld.clone());
+            this.camera.radius = boundingInfo.boundingSphere.radiusWorld * 2.5;
         }
-        //pending: handle case for transform node
     }
 
     calculateStats(){
@@ -217,11 +221,78 @@ class MyScene{
         this.hlLayer.removeAllMeshes();
         if(!meshUId)
             return;
-        const mesh = this.scene.getMeshByUniqueId(meshUId);
-        if(mesh)
-            this.hlLayer.addMesh(mesh, Color3.FromHexString("#FFEE91"));
         
-        //pending: handle case for transform node
+        const node = this.getNodeByUniqueId(meshUId);
+        if(!node) return;
+
+        if(node instanceof Mesh)
+            this.hlLayer.addMesh(node, Color3.FromHexString("#FFEE91"));
+        else{
+            node.getChildMeshes(false, mesh => mesh instanceof Mesh).forEach(childMesh => {
+                this.hlLayer.addMesh(childMesh, Color3.FromHexString("#FFEE91"));
+            });
+        }
+    }
+
+    setBoundingInfoForAllTransformNodes(){
+        if(!this.container)
+            return;
+
+        this.container.transformNodes.forEach(tNode => {
+            tNode.artificialBoundingInfo = null;
+
+            const childMeshes = tNode.getChildMeshes(false, (mesh) => {
+                if(!(mesh instanceof Mesh)) return false;
+                const meshMin = mesh.getBoundingInfo().boundingBox.minimumWorld;
+                const meshMax = mesh.getBoundingInfo().boundingBox.maximumWorld;
+                return !(meshMin.equals(meshMax));
+            });
+
+            if(childMeshes.length == 0)
+                return;
+            
+            let min = childMeshes[0].getBoundingInfo().boundingBox.minimumWorld;
+            let max = childMeshes[0].getBoundingInfo().boundingBox.maximumWorld;
+            childMeshes.forEach(mesh => {
+                const meshMin = mesh.getBoundingInfo().boundingBox.minimumWorld;
+                const meshMax = mesh.getBoundingInfo().boundingBox.maximumWorld;
+                min = Vector3.Minimize(min, meshMin);
+                max = Vector3.Maximize(max, meshMax);
+            });
+
+            if(min.equals(max))
+                return;
+            
+            tNode.artificialBoundingInfo = new BoundingInfo(min, max);
+        });
+    }
+
+    updateLayerMasking(enableIsolaton, currentUId, previousUId = null){
+        const previousNode = this.getNodeByUniqueId(previousUId);
+        if(previousNode){
+            if(previousNode instanceof Mesh)
+                previousNode.layerMask = defaultLayerMask;
+            else
+                previousNode.getChildMeshes(false, mesh => mesh instanceof Mesh).forEach(childMesh => {childMesh.layerMask = defaultLayerMask});
+        }
+
+        this.camera.layerMask = enableIsolaton ? isolationModeLayerMask : defaultLayerMask;
+
+        const currentNode = this.getNodeByUniqueId(currentUId);
+        if(currentNode){
+            if(currentNode instanceof Mesh)
+                currentNode.layerMask = enableIsolaton ? isolationModeLayerMask : defaultLayerMask;
+            else
+                currentNode.getChildMeshes(false, mesh => mesh instanceof Mesh).forEach(childMesh => {childMesh.layerMask = enableIsolaton ? isolationModeLayerMask : defaultLayerMask});
+        }
+    }
+
+    getNodeByUniqueId(UId){
+        if(!UId) return null;
+
+        let node = this.scene.getMeshByUniqueId(UId);
+        if(!node) node = this.scene.getTransformNodeByUniqueId(UId);
+        return node;
     }
 
     onRender(){

@@ -11,3 +11,6 @@ export const colorNames = {
     "BLACK": "#000000",
     "WHITE": "#FFFFFF",
 }
+
+export const defaultLayerMask = 0x0FFFFFFF;
+export const isolationModeLayerMask = 0xF0000000;

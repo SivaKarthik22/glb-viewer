@@ -33,8 +33,11 @@ export const ContextProvider = ({ children }) => {
 
     const [showSidePanel, setShowSidePanel] = useState(true);
 
+    const heirarchyCompRef = useRef(null)
     const [selectedMesh, setSelectedMesh] = useState(null);
     const [enableHighlight, setEnableHighlight] = useState(false);
+    const [autoFocus, setAutoFocus] = useState(true);
+    const [isolationMode, setIsolationMode] = useState(false);
 
     function onFileUpload(event) {
         const file = event.target.files[0];
@@ -87,6 +90,14 @@ export const ContextProvider = ({ children }) => {
         setShowSidePanel(showSidePanel => !showSidePanel);
     }
 
+    function updateSelection(curSelection){
+        const mySceneObj = MyScene.getInstanceOfMyScene();
+        mySceneObj.updateLayerMasking(mySceneObj.isolationMode, curSelection, mySceneObj.selectedMesh ?? null)
+        setSelectedMesh(curSelection);
+        mySceneObj.selectedMesh = curSelection;
+        mySceneObj.updateMeshHighlight(curSelection);
+    }
+
     return (
         <Context.Provider value={{
             variableWidth,
@@ -122,6 +133,12 @@ export const ContextProvider = ({ children }) => {
             setSelectedMesh,
             enableHighlight,
             setEnableHighlight,
+            heirarchyCompRef,
+            autoFocus,
+            setAutoFocus,
+            isolationMode,
+            setIsolationMode,
+            updateSelection,
         }}>
             {children}
         </Context.Provider>
