@@ -23,6 +23,7 @@
   flex-direction: column;
   background-color: grey;
   height: 100vh;
+  position: relative;
 }
 
 #panel-head{
@@ -31,7 +32,7 @@
 }
 
 #panel-body{
-  flex: 1;
+  height: calc(100% - 50px);
 }
 
 .section-heading{
@@ -119,3 +120,75 @@
   color: black;
 }
 
+.side-panel-toggle{
+  position: absolute;
+  top: 10px;
+  cursor: pointer;
+}
+#enable-side-panel{
+  right: 0;
+}
+#disable-side-panel{
+  left: -30px;
+}
+
+.flex{
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.selected{
+  background-color: darkgray;
+  color: black;
+  font-weight: bold;
+}
+
+#heirarchy-container{
+  overflow-x: hidden;
+  overflow-y: auto;
+  width: 100%;
+  height: calc(100% - 100px)
+}
+
+#mesh-section{
+  height: 100%;
+}
+
+.unit-name{
+  cursor: pointer;
+  flex: 1;
+}
+
+.no-break{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.unit-list{
+  list-style-type: none;
+  padding-left: 20px;
+}
+
+.unit-list:nth-child(1){
+  padding-left: 0;
+}
+
+.unit{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.unfold-btn{
+  cursor: pointer;
+}
+
+.details-btn{
+  cursor: pointer;
+}
+
+.details-list{
+  list-style-type: none;
+}

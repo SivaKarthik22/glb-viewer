@@ -1,57 +1,101 @@
 import { createContext, useRef, useState } from "react";
+import MyScene from "../classes/MyScene";
+import "@babylonjs/loaders/glTF";
 
 export const Context = createContext(null);
 
-export const ContextProvider = ({children}) => {
+export const ContextProvider = ({ children }) => {
     const [variableWidth, setVariableWidth] = useState(20);
-    
+
     const uploadRef = useRef(null);
-    
+
     const [enableCanvas, setEnableCanvas] = useState(false);
-    const [file, setFile] = useState("");
     const [loading, setLoading] = useState(false);
-    
+    const [glbFile, setGlbFile] = useState("");
+
     const [showToast, setShowToast] = useState(false);
     const [toastMessage, setToastMessage] = useState("");
     const [toastType, setToastType] = useState("none");
 
+    const [currentEnvironment, setCurrentEnvironment] = useState("STUDIO");
+    const [currentColor, setCurrentColor] = useState("NONE");
+    const [wireframe, setWireframe] = useState(false);
+    const [textureMode, setTextureMode] = useState("textured");
+    const [statsData, setStatsData] = useState({
+        meshCount: 0,
+        matCount: 0,
+        trisCount: 0,
+        vertsCount: 0,
+        texsCount: 0,
+    });
+
     const [sceneAnimationNames, setSceneAnimationNames] = useState([]);
 
-    function onFileUpload(event){        
-        try{
-            const file = event.target.files[0];
-            if(!file)
-                return;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                setFile(reader.result);
-                setEnableCanvas(true);
-                setLoading(true);
-            };
-            reader.readAsDataURL(file);
-        }catch(err){
+    const [showSidePanel, setShowSidePanel] = useState(true);
+
+    const heirarchyCompRef = useRef(null)
+    const [selectedMesh, setSelectedMesh] = useState(null);
+    const [enableHighlight, setEnableHighlight] = useState(false);
+    const [autoFocus, setAutoFocus] = useState(true);
+    const [isolationMode, setIsolationMode] = useState(false);
+
+    function onFileUpload(event) {
+        const file = event.target.files[0];
+        if (!file)
+            return;
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            setGlbFile(event.target.result);
+            setEnableCanvas(true);
+        };
+        reader.onerror = (error) => {
             disableCanvas();
             enableToast("Error loading file", "error")
-            console.error(err);
+            console.error(error);
         }
+        reader.readAsDataURL(file);
     }
 
-    function enableToast(toastMessage, toastType){
+    function enableToast(toastMessage, toastType) {
         setShowToast(true);
         setToastMessage(toastMessage);
         setToastType(toastType);
     }
 
-    function forceDisableToast(){
+    function forceDisableToast() {
         setShowToast(false);
         setToastMessage("");
         setToastType("none");
     }
 
-    function disableCanvas(){
-        setEnableCanvas(false);
+    function disableCanvas() {
         setLoading(false);
-        setFile("");
+        setGlbFile("");
+        setEnableCanvas(false);
+        refreshSceneAnimationNames();
+    }
+
+    function refreshSceneAnimationNames() {
+        const animNames = []
+        const mySceneObj = MyScene.getInstanceOfMyScene();
+        if(mySceneObj){
+            mySceneObj.scene.animationGroups.forEach(anim => {
+                animNames.push(anim.name);
+            });
+        }
+        setSceneAnimationNames(animNames);
+    }
+
+    const toggleSidePanelVisibility = () => {
+        setShowSidePanel(showSidePanel => !showSidePanel);
+    }
+
+    function updateSelection(curSelection){
+        const mySceneObj = MyScene.getInstanceOfMyScene();
+        mySceneObj.updateLayerMasking(mySceneObj.isolationMode, curSelection, mySceneObj.selectedMesh ?? null)
+        setSelectedMesh(curSelection);
+        mySceneObj.selectedMesh = curSelection;
+        mySceneObj.updateMeshHighlight(curSelection);
     }
 
     return (
@@ -61,7 +105,7 @@ export const ContextProvider = ({children}) => {
             uploadRef,
             enableCanvas,
             onFileUpload,
-            file,
+            glbFile,
             loading,
             setLoading,
             showToast,
@@ -72,6 +116,29 @@ export const ContextProvider = ({children}) => {
             disableCanvas,
             sceneAnimationNames,
             setSceneAnimationNames,
+            refreshSceneAnimationNames,
+            currentEnvironment,
+            setCurrentEnvironment,
+            showSidePanel,
+            toggleSidePanelVisibility,
+            currentColor,
+            setCurrentColor,
+            wireframe,
+            setWireframe,
+            textureMode,
+            setTextureMode,
+            statsData,
+            setStatsData,
+            selectedMesh,
+            setSelectedMesh,
+            enableHighlight,
+            setEnableHighlight,
+            heirarchyCompRef,
+            autoFocus,
+            setAutoFocus,
+            isolationMode,
+            setIsolationMode,
+            updateSelection,
         }}>
             {children}
         </Context.Provider>

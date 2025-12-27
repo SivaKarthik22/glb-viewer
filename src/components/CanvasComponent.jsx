@@ -1,46 +1,71 @@
 import { useContext, useEffect, useRef } from "react";
-import { } from "@babylonjs/core";
+import { PointerEventTypes } from "@babylonjs/core";
+import "@babylonjs/loaders/glTF";
 import MyScene from "../classes/MyScene";
 import { Context } from "../context API/ContextProvider";
 import LoadingComp from "./Loading";
+import "babylonjs-inspector";
 
 function CanvasComponent() {
   const reactCanvas = useRef(null);
-  const {enableCanvas, file, setLoading, enableToast, disableCanvas, setSceneAnimationNames} = useContext(Context);
+  const { enableCanvas, glbFile, setLoading, enableToast, disableCanvas, refreshSceneAnimationNames, currentEnvironment, currentColor, wireframe, textureMode, setStatsData, enableHighlight, setIsolationMode, updateSelection } = useContext(Context);
+
+  function setSceneClickObservable(mySceneObj) {
+    mySceneObj.scene.onPointerObservable.add(pointerInfo => {
+      if (pointerInfo.type !== PointerEventTypes.POINTERTAP)
+        return;
+      let curSelection = null
+      const pickResult = pointerInfo.pickInfo;
+      if (pickResult?.hit && pickResult.pickedMesh) {
+        const pickedMesh = pickResult.pickedMesh;
+        for (const mesh of mySceneObj.container.meshes) {
+          if (pickedMesh.uniqueId == mesh.uniqueId)
+            curSelection = mesh.uniqueId;
+        }
+      }
+      updateSelection(curSelection);
+    });
+  }
+
+  async function onSceneReadyTasks(mySceneObj) {
+    try {
+      setLoading(true);
+      await mySceneObj.importMeshFromFile(glbFile);
+      mySceneObj.prepareMeshesForDebugMode();
+      mySceneObj.createEnvironment(currentEnvironment, currentColor);
+      mySceneObj.setBoundingInfoForAllTransformNodes();
+      mySceneObj.enableDisableWireframeView(wireframe);
+      mySceneObj.enableDisableSolidMode(textureMode);
+      mySceneObj.setupEffectLayer(enableHighlight);
+      setIsolationMode(false);
+      setStatsData(mySceneObj.calculateStats());
+      refreshSceneAnimationNames();
+      setSceneClickObservable(mySceneObj);
+      setLoading(false);
+    }
+    catch (err) {
+      enableToast("Error occurred", "error");
+      disableCanvas();
+      console.error(err);
+    }
+  }
 
   useEffect(() => {
-    if(!enableCanvas)
+    if (!enableCanvas)
       return;
-    
-    const { current: canvas } = reactCanvas;
-    if (!canvas) return;
 
-    const mySceneObj = new MyScene(canvas);
+    const { current: canvas } = reactCanvas;
+    if (!canvas)
+      return;
+
+    const mySceneObj = MyScene.getInstanceOfMyScene(canvas);
     const scene = mySceneObj.scene;
 
-    async function onSceneReadyTasks(){
-      mySceneObj.onSceneReady(file)
-      .then(()=>{
-        setLoading(false);
-        
-        const animNames = []
-        scene.animationGroups.forEach(anim => {
-          animNames.push(anim.name);
-        });
-        setSceneAnimationNames(animNames);
-      })
-      .catch(err => {
-        enableToast("Error loading file", "error");
-        disableCanvas();
-        console.error(err);
-      });
-    }
-
     if (scene.isReady()) {
-      onSceneReadyTasks();
+      onSceneReadyTasks(mySceneObj);
     } else {
       scene.onReadyObservable.addOnce(() => {
-        onSceneReadyTasks();
+        onSceneReadyTasks(mySceneObj);
       });
     }
 
@@ -57,20 +82,30 @@ function CanvasComponent() {
       window.addEventListener("resize", resize);
     }
 
+    //----------for debugging
+    document.addEventListener("keydown", (e) => {
+      if (e.shiftKey && e.ctrlKey) {
+        scene.debugLayer.isVisible()
+          ? scene.debugLayer.hide()
+          : scene.debugLayer.show();
+      }
+    })
+    //----------
+
     return () => {
       mySceneObj.engine.dispose();
-
+      MyScene.disposeInstanceOfMyScene();
       if (window) {
         window.removeEventListener("resize", resize);
       }
     };
-  }, [enableCanvas, file]);
+  }, [enableCanvas, glbFile]);
 
-  if(enableCanvas){
+  if (enableCanvas) {
     return (
       <>
-        <canvas ref={reactCanvas} id="canvas"/> 
-        <LoadingComp/>
+        <canvas ref={reactCanvas} id="canvas" />
+        <LoadingComp />
       </>
     );
   }
