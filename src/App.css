@@ -157,6 +157,7 @@
 
 .unit-name{
   cursor: pointer;
+  flex: 1;
 }
 
 .no-break{
@@ -177,7 +178,7 @@
 .unit{
   display: flex;
   align-items: center;
-  justify-content: start;
+  justify-content: space-between;
 }
 
 .unfold-btn{

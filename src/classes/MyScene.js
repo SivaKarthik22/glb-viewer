@@ -9,7 +9,7 @@ class MyScene{
         this.canvas = canvas;
         this.engine = new Engine(this.canvas, true, {}, true);
         this.scene = new Scene(this.engine, {});
-        this.camera = new ArcRotateCamera("camera1", 0, 0, 10, new Vector3(0, 5, -10), this.scene);
+        this.camera = new ArcRotateCamera("camera1", 1.5708, 1.5708, 10, new Vector3(0, 5, -10), this.scene);
         this.camera.attachControl(this.canvas, true);
     }
 
@@ -165,10 +165,12 @@ class MyScene{
         //set scroll speed based on bb
         this.camera.wheelPrecision = 100 / this.sceneBoundingInfo.boundingSphere.radiusWorld;
 
-        this.camera.minZ = 0.01;
+        this.camera.minZ = 0.0001;
         this.camera.lowerRadiusLimit = 0.01;
         this.camera.panningInertia = 0.2;
         this.camera.panningSensibility = 2000;
+        this.camera.alpha = 1.5708;
+        this.camera.beta = 1.5708;
     }
 
     focus(meshUId){

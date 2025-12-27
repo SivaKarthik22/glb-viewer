@@ -5,15 +5,14 @@ This is a web based GLB viewer application being built using React and Babylon.j
 things to update:
 -search in outliner
 -remember fold and unfold states in outliner
--add mesh hide/unhide feature
 -unhide all button
 -animation player
 -side panel width adjust
 
 improvisation:
--update panning - it is not proper
+-update panning - it is not proper - use panning sensitivity and speed properties of camera
 -find solution to use context states for isolation mode workflow
+-improve highlight quality - try to achieve outline instead of highlight
 
 ideas:
 -use usereducer to store state data of each mesh - fold/unfold, hide/unhide, show/hide-details
--no need states for hide/unhide. get real time data of model from babylon - update button icon accordingly

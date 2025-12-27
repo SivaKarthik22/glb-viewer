@@ -1,6 +1,6 @@
 import { Mesh, TransformNode } from "@babylonjs/core";
 import MyScene from "../classes/MyScene";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Context } from "../context API/ContextProvider";
 
 export default function MeshSection() {
@@ -74,11 +74,12 @@ export default function MeshSection() {
     );
 }
 
-function HeirarchyComp({ parentObj, showUnit = true }) {
+function HeirarchyComp({ parentObj, showUnit = true, enableEyeBtn = true }) {
     const { selectedMesh, heirarchyCompRef, updateSelection } = useContext(Context);
     const childObjs = parentObj.getChildren((node) => (node instanceof Mesh || node instanceof TransformNode), true);
     const [unfolded, setUnfolded] = useState(true);
     const [showDetails, setShowDetails] = useState(false);
+    const [meshState, setMeshState] = useState(true);
 
     const handleUnitNameClick = event => {
         const uniqueId = parseInt(event.target.id);
@@ -86,6 +87,15 @@ function HeirarchyComp({ parentObj, showUnit = true }) {
             updateSelection(null);
         else
             updateSelection(uniqueId)
+    }
+
+    useEffect(()=>{
+        setMeshState(parentObj.isEnabled(false));
+    }, []);
+
+    const handleMeshStateChange = ()=>{
+        parentObj.setEnabled(!meshState);
+        setMeshState(!meshState);
     }
 
     return (<>
@@ -110,6 +120,7 @@ function HeirarchyComp({ parentObj, showUnit = true }) {
                 >
                     {(parentObj instanceof Mesh ? "[] " : "} ") + parentObj.name}
                 </div>
+                <button disabled={!enableEyeBtn} onClick={handleMeshStateChange} className="eye-btn">{meshState ? "(o)" : "( )"}</button>
             </div> :
             <></>
         }
@@ -125,7 +136,7 @@ function HeirarchyComp({ parentObj, showUnit = true }) {
         {unfolded ?
             <ul className="unit-list">
                 {childObjs.map((childObj, idx) => <li key={idx}>
-                    <HeirarchyComp parentObj={childObj} />
+                    <HeirarchyComp parentObj={childObj} enableEyeBtn={meshState && enableEyeBtn}/>
                 </li>)}
             </ul>
             : <></>
