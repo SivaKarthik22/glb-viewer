@@ -7,10 +7,8 @@ things to update:
 -remember fold and unfold states in outliner
 -unhide all button
 -animation player
--side panel width adjust
 
 improvisation:
--update panning - it is not proper - use panning sensitivity and speed properties of camera
 -find solution to use context states for isolation mode workflow
 -improve highlight quality - try to achieve outline instead of highlight
 

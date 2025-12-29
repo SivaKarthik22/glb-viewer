@@ -74,13 +74,17 @@ function CanvasComponent() {
       scene.render();
     });
 
+    let timeoutId = null;
     const resize = () => {
-      mySceneObj.engine.resize();
+      if(timeoutId)
+        clearTimeout(timeoutId);
+      timeoutId = setTimeout(()=>{
+        mySceneObj.engine.resize();
+      }, 100);
     };
 
-    if (window) {
-      window.addEventListener("resize", resize);
-    }
+    const resizeObserver = new ResizeObserver(resize);
+    resizeObserver.observe(reactCanvas.current);
 
     //----------for debugging
     document.addEventListener("keydown", (e) => {
@@ -95,9 +99,7 @@ function CanvasComponent() {
     return () => {
       mySceneObj.engine.dispose();
       MyScene.disposeInstanceOfMyScene();
-      if (window) {
-        window.removeEventListener("resize", resize);
-      }
+      resizeObserver.unobserve(reactCanvas.current);
     };
   }, [enableCanvas, glbFile]);
 
