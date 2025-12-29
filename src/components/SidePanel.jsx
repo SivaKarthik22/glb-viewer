@@ -24,10 +24,6 @@ function SidePanel() {
                         className= {`${currentSection === "Mesh" ? "selected " : ""}section-heading`}
                         onClick={sectionBtnClick}
                     >Mesh</button>
-                    {/* <button
-                        className="section-heading"
-                        onClick={sectionBtnClick}
-                    >Material</button> */}
                     <button 
                         className= {`${currentSection === "Scene" ? "selected " : ""}section-heading`}
                         onClick={sectionBtnClick}
@@ -35,7 +31,6 @@ function SidePanel() {
                 </div>
                 <div id="panel-body">
                     {currentSection === "Mesh" && <MeshSection />}
-                    {/*currentSection === "Material" && <MaterialSection />*/}
                     {currentSection === "Scene" && <SceneSection />}
                 </div>
             </div>

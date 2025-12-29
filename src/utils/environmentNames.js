@@ -14,3 +14,5 @@ export const colorNames = {
 
 export const defaultLayerMask = 0x0FFFFFFF;
 export const isolationModeLayerMask = 0xF0000000;
+
+export const effectColor = "white"

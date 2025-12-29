@@ -1,6 +1,6 @@
 import {Engine, Scene, Vector3, ArcRotateCamera, LoadAssetContainerAsync, BoundingInfo, CubeTexture, Color3, MeshDebugPluginMaterial, MeshDebugMode, HighlightLayer, Mesh} from "@babylonjs/core";
 import "@babylonjs/loaders/glTF"
-import { colorNames, defaultLayerMask, environmentNames, isolationModeLayerMask } from "../utils/environmentNames";
+import { colorNames, defaultLayerMask, effectColor, environmentNames, isolationModeLayerMask } from "../utils/environmentNames";
 
 class MyScene{
     static instance = null;
@@ -164,13 +164,19 @@ class MyScene{
         this.camera.upperRadiusLimit = this.sceneBoundingInfo.boundingSphere.radiusWorld * 25;
         //set scroll speed based on bb
         this.camera.wheelPrecision = 100 / this.sceneBoundingInfo.boundingSphere.radiusWorld;
-
+        
         this.camera.minZ = 0.0001;
         this.camera.lowerRadiusLimit = 0.01;
-        this.camera.panningInertia = 0.2;
-        this.camera.panningSensibility = 2000;
+        this.camera.pinchDeltaPercentage = 0.01;
+        this.camera.wheelDeltaPercentage = 0.01;
+        
         this.camera.alpha = 1.5708;
         this.camera.beta = 1.5708;
+
+        this.camera.onViewMatrixChangedObservable.add(()=>{
+            this.camera.speed = this.camera.radius * 0.2;
+            this.camera.panningSensibility = 5000 / this.camera.radius;
+        });
     }
 
     focus(meshUId){
@@ -228,10 +234,10 @@ class MyScene{
         if(!node) return;
 
         if(node instanceof Mesh)
-            this.hlLayer.addMesh(node, Color3.FromHexString("#FFEE91"));
+            this.hlLayer.addMesh(node, Color3.FromHexString(effectColor));
         else{
             node.getChildMeshes(false, mesh => mesh instanceof Mesh).forEach(childMesh => {
-                this.hlLayer.addMesh(childMesh, Color3.FromHexString("#FFEE91"));
+                this.hlLayer.addMesh(childMesh, Color3.FromHexString(effectColor));
             });
         }
     }
