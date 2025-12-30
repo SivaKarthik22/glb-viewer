@@ -5,10 +5,10 @@ import MeshSection from "./MeshSection";
 
 function SidePanel() {
     const { variableWidth, enableCanvas, showSidePanel, toggleSidePanelVisibility } = useContext(Context);
-    const [currentSection, setCurrentSection] = useState("Scene");
+    const [currentSection, setCurrentSection] = useState("Mesh");
 
     const sectionBtnClick = event =>{
-        setCurrentSection(event.target.innerText);
+        setCurrentSection(event.target.id);
     }
 
     if (enableCanvas && showSidePanel) {
@@ -21,13 +21,15 @@ function SidePanel() {
                 >{">>"}</button>
                 <div id="panel-head">
                     <button
+                        id="Mesh"
                         className= {`${currentSection === "Mesh" ? "selected " : ""}section-heading`}
                         onClick={sectionBtnClick}
-                    >Mesh</button>
-                    <button 
+                    >Scene</button>
+                    <button
+                        id="Scene"
                         className= {`${currentSection === "Scene" ? "selected " : ""}section-heading`}
                         onClick={sectionBtnClick}
-                    >Scene</button>
+                    >Settings</button>
                 </div>
                 <div id="panel-body">
                     {currentSection === "Mesh" && <MeshSection />}

@@ -1,6 +1,7 @@
-import { createContext, useRef, useState } from "react";
+import { createContext, useReducer, useRef, useState } from "react";
 import MyScene from "../classes/MyScene";
 import "@babylonjs/loaders/glTF";
+import { outlinerReducer } from "./Reducer";
 
 export const Context = createContext(null);
 
@@ -38,6 +39,7 @@ export const ContextProvider = ({ children }) => {
     const [enableHighlight, setEnableHighlight] = useState(false);
     const [autoFocus, setAutoFocus] = useState(true);
     const [isolationMode, setIsolationMode] = useState(false);
+    const [outlinerStates, dispatchOutlinerActions] = useReducer(outlinerReducer, {});
 
     function onFileUpload(event) {
         const file = event.target.files[0];
@@ -139,6 +141,8 @@ export const ContextProvider = ({ children }) => {
             isolationMode,
             setIsolationMode,
             updateSelection,
+            outlinerStates,
+            dispatchOutlinerActions,
         }}>
             {children}
         </Context.Provider>

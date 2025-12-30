@@ -1,16 +1,16 @@
 import { Mesh, TransformNode } from "@babylonjs/core";
 import MyScene from "../classes/MyScene";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { Context } from "../context API/ContextProvider";
 
 export default function MeshSection() {
-    const { loading, enableHighlight, setEnableHighlight, selectedMesh, autoFocus, setAutoFocus, heirarchyCompRef, isolationMode, setIsolationMode } = useContext(Context);
+    const { loading, enableHighlight, setEnableHighlight, selectedMesh, autoFocus, setAutoFocus, heirarchyCompRef, isolationMode, setIsolationMode, dispatchOutlinerActions } = useContext(Context);
     const mySceneObj = MyScene.getInstanceOfMyScene();
 
     function displaySceneHeirarchy() {
-        const rootMesh = mySceneObj.scene.getNodeByName("__root__");
+        const rootMesh = mySceneObj?.scene.getNodeByName("__root__") ?? null;
         return <div id="heirarchy-container">
-            {rootMesh ? <HeirarchyComp parentObj={rootMesh} showUnit={false} /> : "no meshes found!"}
+            {rootMesh ? <HeirarchyComp parentObj={rootMesh} showUnit={false}/> : "no meshes found!"}
         </div>;
     }
 
@@ -41,6 +41,11 @@ export default function MeshSection() {
         mySceneObj.updateLayerMasking(checked, selectedMesh);
     }
 
+    const handleShowAll = ()=>{
+        mySceneObj.enableAllNodes();
+        dispatchOutlinerActions({type: "show_all_nodes"});
+    }
+
     return (
         <div id="mesh-section">
             <div>
@@ -68,18 +73,19 @@ export default function MeshSection() {
                     onChange={toggleIsolationMode}
                 />
             </div>
-            <h4 style={{ margin: 0 }}>Scene Meshes</h4>
+            <div className="flex" style={{alignItems:"center", justifyContent:"space-between"}}>
+                <h4 style={{ margin: 0 }}>Scene Meshes</h4>
+                {loading ? <></> : <button onClick={handleShowAll}>Unhide All</button>}
+            </div>
             {loading ? <p>Loading...</p> : displaySceneHeirarchy()}
         </div>
     );
 }
 
 function HeirarchyComp({ parentObj, showUnit = true, enableEyeBtn = true }) {
-    const { selectedMesh, heirarchyCompRef, updateSelection } = useContext(Context);
+    const { selectedMesh, heirarchyCompRef, updateSelection, outlinerStates, dispatchOutlinerActions } = useContext(Context);
     const childObjs = parentObj.getChildren((node) => (node instanceof Mesh || node instanceof TransformNode), true);
-    const [unfolded, setUnfolded] = useState(true);
-    const [showDetails, setShowDetails] = useState(false);
-    const [meshState, setMeshState] = useState(true);
+    const {nodeState, showDetails, unfolded} = outlinerStates[parentObj.uniqueId];
 
     const handleUnitNameClick = event => {
         const uniqueId = parseInt(event.target.id);
@@ -89,26 +95,23 @@ function HeirarchyComp({ parentObj, showUnit = true, enableEyeBtn = true }) {
             updateSelection(uniqueId)
     }
 
-    useEffect(()=>{
-        setMeshState(parentObj.isEnabled(false));
-    }, []);
 
     const handleMeshStateChange = ()=>{
-        parentObj.setEnabled(!meshState);
-        setMeshState(!meshState);
+        parentObj.setEnabled(!nodeState);
+        dispatchOutlinerActions({type:"toggle_show_hide_node", payload: parentObj.uniqueId})
     }
 
     return (<>
         {showUnit ?
             <div className="unit" ref={selectedMesh == parentObj.uniqueId ? heirarchyCompRef : null}>
                 {childObjs.length != 0 ?
-                    <button className="unfold-btn" onClick={() => setUnfolded(curState => !curState)}>
+                    <button className="unfold-btn" onClick={() => dispatchOutlinerActions({type:"toggle_fold_unfold", payload: parentObj.uniqueId}) }>
                         {unfolded ? "-" : "+"}
                     </button>
                     : <></>
                 }
                 {parentObj instanceof Mesh ?
-                    <button className="details-btn" onClick={() => setShowDetails(curState => !curState)}>
+                    <button className="details-btn" onClick={() => dispatchOutlinerActions({type:"toggle_show_hide_details", payload: parentObj.uniqueId}) }>
                         {showDetails ? "^" : "v"}
                     </button>
                     : <></>
@@ -120,7 +123,7 @@ function HeirarchyComp({ parentObj, showUnit = true, enableEyeBtn = true }) {
                 >
                     {(parentObj instanceof Mesh ? "[] " : "} ") + parentObj.name}
                 </div>
-                <button disabled={!enableEyeBtn} onClick={handleMeshStateChange} className="eye-btn">{meshState ? "(o)" : "( )"}</button>
+                <button disabled={!enableEyeBtn} onClick={handleMeshStateChange} className="eye-btn">{nodeState ? "(o)" : "( )"}</button>
             </div> :
             <></>
         }
@@ -136,7 +139,7 @@ function HeirarchyComp({ parentObj, showUnit = true, enableEyeBtn = true }) {
         {unfolded ?
             <ul className="unit-list">
                 {childObjs.map((childObj, idx) => <li key={idx}>
-                    <HeirarchyComp parentObj={childObj} enableEyeBtn={meshState && enableEyeBtn}/>
+                    <HeirarchyComp parentObj={childObj} enableEyeBtn={nodeState && enableEyeBtn}/>
                 </li>)}
             </ul>
             : <></>

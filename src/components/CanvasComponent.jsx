@@ -8,7 +8,7 @@ import "babylonjs-inspector";
 
 function CanvasComponent() {
   const reactCanvas = useRef(null);
-  const { enableCanvas, glbFile, setLoading, enableToast, disableCanvas, refreshSceneAnimationNames, currentEnvironment, currentColor, wireframe, textureMode, setStatsData, enableHighlight, setIsolationMode, updateSelection } = useContext(Context);
+  const { enableCanvas, glbFile, setLoading, enableToast, disableCanvas, refreshSceneAnimationNames, currentEnvironment, currentColor, wireframe, textureMode, setStatsData, enableHighlight, setIsolationMode, updateSelection, dispatchOutlinerActions } = useContext(Context);
 
   function setSceneClickObservable(mySceneObj) {
     mySceneObj.scene.onPointerObservable.add(pointerInfo => {
@@ -31,6 +31,7 @@ function CanvasComponent() {
     try {
       setLoading(true);
       await mySceneObj.importMeshFromFile(glbFile);
+      dispatchOutlinerActions({type:"initialise_state", payload: mySceneObj.container});
       mySceneObj.prepareMeshesForDebugMode();
       mySceneObj.createEnvironment(currentEnvironment, currentColor);
       mySceneObj.setBoundingInfoForAllTransformNodes();
@@ -100,6 +101,7 @@ function CanvasComponent() {
       mySceneObj.engine.dispose();
       MyScene.disposeInstanceOfMyScene();
       resizeObserver.unobserve(reactCanvas.current);
+      dispatchOutlinerActions({type:"reset_state"});
     };
   }, [enableCanvas, glbFile]);
 

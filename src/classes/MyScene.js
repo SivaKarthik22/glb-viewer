@@ -23,6 +23,7 @@ class MyScene{
     async importMeshFromFile(glbFile){
         this.container = await LoadAssetContainerAsync(glbFile);
         this.container.addAllToScene();
+        console.log(this.container);
     }
 
     prepareMeshesForDebugMode(){
@@ -165,7 +166,7 @@ class MyScene{
         //set scroll speed based on bb
         this.camera.wheelPrecision = 100 / this.sceneBoundingInfo.boundingSphere.radiusWorld;
         
-        this.camera.minZ = 0.0001;
+        this.camera.minZ = 0.01;
         this.camera.lowerRadiusLimit = 0.01;
         this.camera.pinchDeltaPercentage = 0.01;
         this.camera.wheelDeltaPercentage = 0.01;
@@ -301,6 +302,14 @@ class MyScene{
         let node = this.scene.getMeshByUniqueId(UId);
         if(!node) node = this.scene.getTransformNodeByUniqueId(UId);
         return node;
+    }
+
+    enableAllNodes(){
+        if(!this.container)
+            return false;
+        this.container.transformNodes.forEach(node => node.setEnabled(true));
+        this.container.meshes.forEach(mesh => mesh.setEnabled(true));
+        return true;
     }
 
     onRender(){
