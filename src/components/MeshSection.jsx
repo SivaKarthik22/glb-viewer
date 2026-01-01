@@ -1,6 +1,6 @@
 import { Mesh, TransformNode } from "@babylonjs/core";
 import MyScene from "../classes/MyScene";
-import { useContext } from "react";
+import { memo, useContext, useMemo } from "react";
 import { Context } from "../context API/ContextProvider";
 
 export default function MeshSection() {
@@ -82,9 +82,9 @@ export default function MeshSection() {
     );
 }
 
-function HeirarchyComp({ parentObj, showUnit = true, enableEyeBtn = true }) {
+const HeirarchyComp = memo( ({ parentObj, showUnit = true, enableEyeBtn = true }) => {
     const { selectedMesh, heirarchyCompRef, updateSelection, outlinerStates, dispatchOutlinerActions } = useContext(Context);
-    const childObjs = parentObj.getChildren((node) => (node instanceof Mesh || node instanceof TransformNode), true);
+    const childObjs = useMemo(()=> parentObj.getChildren((node) => (node instanceof Mesh || node instanceof TransformNode), true), [parentObj] ) ;
     const {nodeState, showDetails, unfolded} = outlinerStates[parentObj.uniqueId];
 
     const handleUnitNameClick = event => {
@@ -145,4 +145,4 @@ function HeirarchyComp({ parentObj, showUnit = true, enableEyeBtn = true }) {
             : <></>
         }
     </>);
-}
+})

@@ -8,7 +8,7 @@ import "babylonjs-inspector";
 
 function CanvasComponent() {
   const reactCanvas = useRef(null);
-  const { enableCanvas, glbFile, setLoading, enableToast, disableCanvas, refreshSceneAnimationNames, currentEnvironment, currentColor, wireframe, textureMode, setStatsData, enableHighlight, setIsolationMode, updateSelection, dispatchOutlinerActions } = useContext(Context);
+  const { enableCanvas, glbFile, setLoading, enableToast, disableCanvas, checkForAnimations, currentEnvironment, currentColor, wireframe, textureMode, setStatsData, enableHighlight, setIsolationMode, updateSelection, dispatchOutlinerActions } = useContext(Context);
 
   function setSceneClickObservable(mySceneObj) {
     mySceneObj.scene.onPointerObservable.add(pointerInfo => {
@@ -40,7 +40,7 @@ function CanvasComponent() {
       mySceneObj.setupEffectLayer(enableHighlight);
       setIsolationMode(false);
       setStatsData(mySceneObj.calculateStats());
-      refreshSceneAnimationNames();
+      checkForAnimations();
       setSceneClickObservable(mySceneObj);
       setLoading(false);
     }
@@ -81,7 +81,7 @@ function CanvasComponent() {
         clearTimeout(timeoutId);
       timeoutId = setTimeout(()=>{
         mySceneObj.engine.resize();
-      }, 100);
+      }, 50);
     };
 
     const resizeObserver = new ResizeObserver(resize);

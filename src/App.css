@@ -50,6 +50,10 @@
   height: 50px;
   background-color: darkgrey;
   width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap:2em;
+  padding: 1em 2em;
 }
 
 #pre-canvas{
@@ -191,4 +195,9 @@
 
 .details-list{
   list-style-type: none;
+}
+
+#anim-slider{
+  flex: 1;
+  display: block;
 }

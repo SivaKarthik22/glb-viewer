@@ -30,7 +30,7 @@ export const ContextProvider = ({ children }) => {
         texsCount: 0,
     });
 
-    const [sceneAnimationNames, setSceneAnimationNames] = useState([]);
+    const [hasAnimations, setHasAnimations] = useState(false);
 
     const [showSidePanel, setShowSidePanel] = useState(true);
 
@@ -74,18 +74,15 @@ export const ContextProvider = ({ children }) => {
         setLoading(false);
         setGlbFile("");
         setEnableCanvas(false);
-        refreshSceneAnimationNames();
+        checkForAnimations();
     }
 
-    function refreshSceneAnimationNames() {
-        const animNames = []
+    function checkForAnimations() {
         const mySceneObj = MyScene.getInstanceOfMyScene();
-        if(mySceneObj){
-            mySceneObj.scene.animationGroups.forEach(anim => {
-                animNames.push(anim.name);
-            });
-        }
-        setSceneAnimationNames(animNames);
+        if(mySceneObj?.scene?.animationGroups.length ?? 0 > 0)
+            setHasAnimations(true);
+        else
+            setHasAnimations(false);
     }
 
     const toggleSidePanelVisibility = () => {
@@ -116,9 +113,9 @@ export const ContextProvider = ({ children }) => {
             toastMessage,
             toastType,
             disableCanvas,
-            sceneAnimationNames,
-            setSceneAnimationNames,
-            refreshSceneAnimationNames,
+            hasAnimations,
+            setHasAnimations,
+            checkForAnimations,
             currentEnvironment,
             setCurrentEnvironment,
             showSidePanel,

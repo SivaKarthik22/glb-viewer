@@ -4,7 +4,6 @@ This is a web based GLB viewer application being built using React and Babylon.j
 
 things to update:
 -animation player
--optimize outliner comps 
 
 improvisation:
 -find solution to use context states for isolation mode workflow
