@@ -47,13 +47,25 @@
 
 #anim-player{
   display: flex;
-  height: 50px;
   background-color: darkgrey;
   width: 100%;
   align-items: center;
   justify-content: space-between;
   gap:2em;
   padding: 1em 2em;
+  position: relative;
+}
+
+.toggle-btn{
+  position: absolute;
+  transform: rotate(90deg);
+  left: 10px;
+}
+.toggle-btn.close-btn{
+  bottom: 55px;
+}
+.toggle-btn.open-btn{
+  bottom: 0;
 }
 
 #pre-canvas{

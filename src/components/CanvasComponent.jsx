@@ -38,6 +38,7 @@ function CanvasComponent() {
       mySceneObj.enableDisableWireframeView(wireframe);
       mySceneObj.enableDisableSolidMode(textureMode);
       mySceneObj.setupEffectLayer(enableHighlight);
+      mySceneObj.resetSceneAnimations();
       setIsolationMode(false);
       setStatsData(mySceneObj.calculateStats());
       checkForAnimations();
@@ -98,9 +99,10 @@ function CanvasComponent() {
     //----------
 
     return () => {
-      mySceneObj.engine.dispose();
+      mySceneObj?.engine.dispose();
       MyScene.disposeInstanceOfMyScene();
-      resizeObserver.unobserve(reactCanvas.current);
+      if(reactCanvas.current)
+        resizeObserver.unobserve(reactCanvas.current);
       dispatchOutlinerActions({type:"reset_state"});
     };
   }, [enableCanvas, glbFile]);

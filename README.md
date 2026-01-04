@@ -3,7 +3,6 @@
 This is a web based GLB viewer application being built using React and Babylon.js
 
 things to update:
--animation player
 
 improvisation:
 -find solution to use context states for isolation mode workflow

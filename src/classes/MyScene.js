@@ -312,6 +312,14 @@ class MyScene{
         return true;
     }
 
+    resetSceneAnimations(){
+        const animationGroups = this.scene?.animationGroups ?? [];
+        console.log(animationGroups)
+        if(animationGroups.length == 0) return;
+        this.scene.animationGroups.forEach(anim => anim.stop() );
+        this.scene.animationGroups[0].play(true);
+    }
+
     onRender(){
     };
 }
