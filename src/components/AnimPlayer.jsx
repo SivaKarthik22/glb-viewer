@@ -9,7 +9,8 @@ function AnimPlayer(){
     const [sliderValue, setSliderValue] = useState(0);
     const [showAnimPlayer, setShowAnimPlayer] = useState(true);
     const intervalId = useRef(null);
-    const maxRange = 500;
+    const [maxRange, setMaxRange] = useState(0);
+    const [minRange, setMinRange] = useState(0);
 
     useEffect(()=>{
         if(enableCanvas && !loading){
@@ -18,20 +19,32 @@ function AnimPlayer(){
         }
     }, [loading]);
 
-    const playSlider = (animation)=>{
+    /* const playSlider2 = (animation)=>{
+        console.log(animation);
         const fps = animation.targetedAnimations[0].animation.framePerSecond;
-        const totalSecs = animation.to / fps;
+        const totalSecs = (animation.to - animation.from + 1) / fps;
         if(intervalId.current) clearInterval(intervalId.current);
         intervalId.current = setInterval(()=>{
             setSliderValue(sliderValue => (sliderValue+1)%maxRange);
         }, totalSecs*1000/maxRange);
+    } */
+
+    const playSlider = (animation)=>{
+        if(intervalId.current) clearInterval(intervalId.current);
+        intervalId.current = setInterval(()=>{
+            const currentFrame = animation.getCurrentFrame();
+            setSliderValue(currentFrame);
+        }, 10);
     }
 
     useEffect(()=>{
         if(!hasAnimations) return;
         const mySceneObj = MyScene.getInstanceOfMyScene();
         if(!mySceneObj) return;
-        playSlider( mySceneObj.scene.animationGroups[0] );
+        const animation = mySceneObj.scene.animationGroups[curAnimIdx]; 
+        setMaxRange(animation.to);
+        setMinRange(animation.from);
+        playSlider(animation);
     }, [hasAnimations]);
 
     if(enableCanvas && hasAnimations){
@@ -42,8 +55,11 @@ function AnimPlayer(){
             scene.animationGroups[event.target.value].play(true);
             setCurAnimIdx(event.target.value);
             setPlaying(true);
-            setSliderValue(0);
-            playSlider(scene.animationGroups[event.target.value]);
+            const animation = scene.animationGroups[event.target.value]; 
+            setMaxRange(animation.to);
+            setMinRange(animation.from);
+            setSliderValue(animation.from);
+            playSlider(animation);
         }
 
         const handlePlayPause = () =>{
@@ -62,8 +78,8 @@ function AnimPlayer(){
         const handleSliderSliding = event =>{
             if(intervalId.current) clearInterval(intervalId.current);
             const animation = scene.animationGroups[curAnimIdx];
-            setSliderValue(event.target.value);
-            const newFrame = event.target.value / maxRange * animation.to;
+            const newFrame = event.target.value;
+            setSliderValue(newFrame);
             animation.goToFrame(newFrame);
             if(playing) playSlider(scene.animationGroups[curAnimIdx]);
         }
@@ -75,8 +91,9 @@ function AnimPlayer(){
                         <button id="play-btn" onClick={handlePlayPause}>{playing ? "Pause" : "Play"}</button>
                         <input
                             type="range"
-                            min="0"
+                            min={minRange}
                             max={maxRange}
+                            step="0.01"
                             value={sliderValue}
                             id="anim-slider"
                             onChange={event => setSliderValue(event.target.value)}
