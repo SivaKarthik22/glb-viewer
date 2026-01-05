@@ -3,7 +3,7 @@ import { Context } from "../context API/ContextProvider";
 import MyScene from "../classes/MyScene";
 
 function AnimPlayer(){
-    const { hasAnimations, enableCanvas, loading } = useContext(Context);
+    const { hasAnimations, enableCanvas, loading, glbFile } = useContext(Context);
     const [playing, setPlaying] = useState(true);
     const [curAnimIdx, setCurAnimIdx] = useState(0);
     const [sliderValue, setSliderValue] = useState(0);
@@ -11,23 +11,6 @@ function AnimPlayer(){
     const intervalId = useRef(null);
     const [maxRange, setMaxRange] = useState(0);
     const [minRange, setMinRange] = useState(0);
-
-    useEffect(()=>{
-        if(enableCanvas && !loading){
-            setCurAnimIdx(0);
-            setPlaying(true);
-        }
-    }, [loading]);
-
-    /* const playSlider2 = (animation)=>{
-        console.log(animation);
-        const fps = animation.targetedAnimations[0].animation.framePerSecond;
-        const totalSecs = (animation.to - animation.from + 1) / fps;
-        if(intervalId.current) clearInterval(intervalId.current);
-        intervalId.current = setInterval(()=>{
-            setSliderValue(sliderValue => (sliderValue+1)%maxRange);
-        }, totalSecs*1000/maxRange);
-    } */
 
     const playSlider = (animation)=>{
         if(intervalId.current) clearInterval(intervalId.current);
@@ -38,14 +21,18 @@ function AnimPlayer(){
     }
 
     useEffect(()=>{
-        if(!hasAnimations) return;
+        if(!enableCanvas || loading || !hasAnimations) return;
+        
+        setCurAnimIdx(0);
+        setPlaying(true);
         const mySceneObj = MyScene.getInstanceOfMyScene();
         if(!mySceneObj) return;
-        const animation = mySceneObj.scene.animationGroups[curAnimIdx]; 
+        const animation = mySceneObj.scene.animationGroups[0];
         setMaxRange(animation.to);
         setMinRange(animation.from);
+        setSliderValue(animation.from);
         playSlider(animation);
-    }, [hasAnimations]);
+    }, [loading]);
 
     if(enableCanvas && hasAnimations){
         const scene = MyScene.getInstanceOfMyScene().scene;
