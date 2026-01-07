@@ -75,7 +75,7 @@ function AnimPlayer(){
             <>
                 {showAnimPlayer ?
                     <div id="anim-player">
-                        <button id="play-btn" onClick={handlePlayPause}>{playing ? "Pause" : "Play"}</button>
+                        <button id="play-btn" onClick={handlePlayPause}>{playing ? <i class="fi fi-sr-pause"></i> : <i class="fi fi-sr-play"></i>}</button>
                         <input
                             type="range"
                             min={minRange}

@@ -8,7 +8,11 @@ export default function HomePage(){
     if(!enableCanvas){
         return(
             <div id="pre-canvas">
-              <UploadButton buttonText="Upload GLB file" />
+                <UploadButton
+                    icon="fi fi-br-upload"
+                    buttonText=" Upload GLB file"
+                    buttonType="big-btn"
+                />
             </div>
         );
     }

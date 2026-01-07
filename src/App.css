@@ -1,8 +1,23 @@
+@import "@flaticon/flaticon-uicons/css/all/all.css";
+
+
 #root {
   margin: 0 auto;
   display: flex;
   position: relative;
   width: 100%;
+}
+
+button{
+  cursor: pointer;
+  border: 0;
+  background-color: #211C6A;
+}
+button:hover{
+  filter: brightness(125%);
+}
+button:active{
+  filter: contrast(150%);
 }
 
 .canvas-container{
@@ -212,4 +227,24 @@
 #anim-slider{
   flex: 1;
   display: block;
+}
+
+.abs-btn{
+  border-radius: 0.5em;
+  font-size: 1.2em;
+  text-align: center;
+  height: 2.25em;
+  width: 2.25em;
+  line-height: 2.4em;
+}
+.upload-btn.big-btn{
+  font-size: 1.25em;
+  padding: 1em 3em;
+  border-radius: 0.5em;
+}
+
+#play-btn{
+  background: none;
+  color: #211C6A;
+  font-size: 1.2em;
 }

@@ -1,18 +1,20 @@
 import { useContext } from "react";
 import { Context } from "../context API/ContextProvider";
 
-function UploadButton({buttonText}){
+function UploadButton({buttonText = null, icon = null, buttonType = ""}){
     const {uploadRef} = useContext(Context);
 
     return(
         <>
             <button
+                className={"upload-btn " + buttonType}
                 onClick={()=>{ 
                     if(uploadRef.current)
                         uploadRef.current.click();
                 }}
             >
-                {buttonText}
+                <span>{icon ? <i className={icon}></i> : ""}</span>
+                <span style={icon && buttonText ? {marginLeft:"0.5em"} : {}}>{buttonText ?? ""}</span>
             </button>
         </>
     );
