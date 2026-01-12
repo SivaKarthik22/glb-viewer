@@ -24,12 +24,12 @@ function SidePanel() {
                         id="Mesh"
                         className= {`${currentSection === "Mesh" ? "selected " : ""}section-heading`}
                         onClick={sectionBtnClick}
-                    >Scene</button>
+                    ><i class="fi fi-sr-cube"></i>Scene</button>
                     <button
                         id="Scene"
                         className= {`${currentSection === "Scene" ? "selected " : ""}section-heading`}
                         onClick={sectionBtnClick}
-                    >Settings</button>
+                    ><i class="fi fi-sr-settings"></i>Settings</button>
                 </div>
                 <div id="panel-body">
                     {currentSection === "Mesh" && <MeshSection />}

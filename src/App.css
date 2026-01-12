@@ -189,6 +189,7 @@ button:active{
 .unit-name{
   cursor: pointer;
   flex: 1;
+  padding: 0.2em 0.25em;
 }
 
 .no-break{
@@ -247,4 +248,8 @@ button:active{
   background: none;
   color: #211C6A;
   font-size: 1.2em;
+}
+
+.gap-left{
+  margin-left: 0.3em;
 }

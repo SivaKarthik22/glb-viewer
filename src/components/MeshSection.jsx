@@ -57,8 +57,8 @@ export default function MeshSection() {
                 />
             </div>
             <div>
-                <button onClick={focusFunctionality}>Focus here</button>
-                <label>Auto-focus here: </label>
+                <button onClick={focusFunctionality}>Focus in outliner</button>
+                <label>Auto-focus</label>
                 <input
                     type="checkbox"
                     checked={autoFocus}
@@ -106,13 +106,7 @@ const HeirarchyComp = memo( ({ parentObj, showUnit = true, enableEyeBtn = true }
             <div className="unit" ref={selectedMesh == parentObj.uniqueId ? heirarchyCompRef : null}>
                 {childObjs.length != 0 ?
                     <button className="unfold-btn" onClick={() => dispatchOutlinerActions({type:"toggle_fold_unfold", payload: parentObj.uniqueId}) }>
-                        {unfolded ? "-" : "+"}
-                    </button>
-                    : <></>
-                }
-                {parentObj instanceof Mesh ?
-                    <button className="details-btn" onClick={() => dispatchOutlinerActions({type:"toggle_show_hide_details", payload: parentObj.uniqueId}) }>
-                        {showDetails ? "^" : "v"}
+                        {unfolded ? <i class="fi fi-rr-minus"></i> : <i class="fi fi-rr-plus"></i>}
                     </button>
                     : <></>
                 }
@@ -121,17 +115,24 @@ const HeirarchyComp = memo( ({ parentObj, showUnit = true, enableEyeBtn = true }
                     className={`${selectedMesh == parentObj.uniqueId ? "selected " : ""}unit-name no-break`}
                     onClick={handleUnitNameClick}
                 >
-                    {(parentObj instanceof Mesh ? "[] " : "} ") + parentObj.name}
+                    {parentObj instanceof Mesh ? <i className="fi fi-rr-cube"></i> : <i className="fi fi-rr-code-branch"></i>}
+                    <span className="gap-left">{parentObj.name}</span>
                 </div>
-                <button disabled={!enableEyeBtn} onClick={handleMeshStateChange} className="eye-btn">{nodeState ? "(o)" : "( )"}</button>
+                {parentObj instanceof Mesh ?
+                    <button className="details-btn" onClick={() => dispatchOutlinerActions({type:"toggle_show_hide_details", payload: parentObj.uniqueId}) }>
+                        {showDetails ? <i class="fi fi-rr-angle-small-up"></i> : <i class="fi fi-rr-angle-small-down"></i>}
+                    </button>
+                    : <></>
+                }
+                <button disabled={!enableEyeBtn} onClick={handleMeshStateChange} className="eye-btn">{nodeState ? <i className="fi fi-rs-eye"></i> : <i className="fi fi-rs-crossed-eye"></i>}</button>
             </div> :
             <></>
         }
         {(showDetails && parentObj instanceof Mesh) ?
             <ul className="details-list">
                 {parentObj.material ? <>
-                    <li className="no-break">{"@ " + parentObj.material.name}</li>
-                    {parentObj.material.getActiveTextures().map((tex, idx) => <li className="no-break" key={idx}>{"* " + tex.name}</li>)}
+                    <li className="no-break"><i class="fi fi-rr-palette"></i>{parentObj.material.name}</li>
+                    {parentObj.material.getActiveTextures().map((tex, idx) => <li className="no-break" key={idx}><i class="fi fi-rr-picture"></i>{tex.name}</li>)}
                 </> : <li>@ no material</li>}
             </ul>
             : <></>
