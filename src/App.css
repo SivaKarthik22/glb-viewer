@@ -1,5 +1,12 @@
 @import "@flaticon/flaticon-uicons/css/all/all.css";
 
+:root {
+--main-color1: #211C6A;
+--main-color2: cornflowerblue;
+--light-bg-color: lightgrey;
+--dark-bg-color: darkgrey; 
+--white-color: white;
+}
 
 #root {
   margin: 0 auto;
@@ -11,7 +18,7 @@
 button{
   cursor: pointer;
   border: 0;
-  background-color: #211C6A;
+  background-color: var(--main-color1);
 }
 button:hover{
   filter: brightness(125%);
@@ -73,7 +80,6 @@ button:active{
 
 .toggle-btn{
   position: absolute;
-  transform: rotate(90deg);
   left: 10px;
 }
 .toggle-btn.close-btn{
@@ -110,7 +116,7 @@ button:active{
   background-color: lightgrey;
 }
 
-#slider.no-hver{
+#slider.no-hover{
   background-color: black;
 }
 
@@ -141,16 +147,6 @@ button:active{
   background-color: greenyellow;
 }
 
-#loading{
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: blanchedalmond;
-  padding: 30px;
-  color: black;
-}
-
 .side-panel-toggle{
   position: absolute;
   top: 10px;
@@ -170,9 +166,7 @@ button:active{
 }
 
 .selected{
-  background-color: darkgray;
-  color: black;
-  font-weight: bold;
+  background-color: rgb(105, 105, 105);
 }
 
 #heirarchy-container{
@@ -188,8 +182,8 @@ button:active{
 
 .unit-name{
   cursor: pointer;
-  flex: 1;
   padding: 0.2em 0.25em;
+  font-size: 0.9em;
 }
 
 .no-break{
@@ -204,25 +198,43 @@ button:active{
 }
 
 .unit-list:nth-child(1){
-  padding-left: 0;
+  padding: 0;
+  margin: 0;
 }
 
 .unit{
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 2em auto 2em 2em;
 }
 
 .unfold-btn{
   cursor: pointer;
+  background: none;
+  font-size: 0.75em;
+  line-height: 0.75em;
 }
 
 .details-btn{
   cursor: pointer;
+  background: none;
+  line-height: 0.75em;
+}
+
+.eye-btn{
+  cursor: pointer;
+  background: none;
+  font-size: 1em;
+  line-height: 0.75em;
 }
 
 .details-list{
   list-style-type: none;
+  padding-left: 60px;
+}
+.details-list li{
+  font-size: small;
+  padding: 0.2em 0.25em;
+  color: rgb(18, 18, 18);
 }
 
 #anim-slider{
@@ -251,5 +263,46 @@ button:active{
 }
 
 .gap-left{
-  margin-left: 0.3em;
+  margin-left: 0.4em;
 }
+.gap-right{
+  margin-right: 0.4em;
+}
+.xsmall{
+  font-size: smaller;
+}
+
+#loading-container{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--main-color1);
+  padding: 30px;
+  border-radius: 50%;
+}
+#loading-bg{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--dark-bg-color);
+}
+
+.loader {
+  width: 50px;
+  aspect-ratio: 1;
+  color: var(--white-color);
+  --_c:no-repeat radial-gradient(farthest-side,currentColor 92%,#0000);
+  background: 
+    var(--_c) 50% 0   /12px 12px,
+    var(--_c) 50% 100%/12px 12px,
+    var(--_c) 100% 50%/12px 12px,
+    var(--_c) 0    50%/12px 12px,
+    var(--_c) 50%  50%/12px 12px,
+    conic-gradient(from 90deg at 4px 4px,#0000 90deg,currentColor 0)
+    -4px -4px/calc(50% + 2px) calc(50% + 2px);
+  animation: l8 1s infinite linear;
+}
+@keyframes l8 {to{transform: rotate(.5turn)}}

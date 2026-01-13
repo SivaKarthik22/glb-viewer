@@ -6,8 +6,10 @@ export default function LoadingComp(){
 
     if(loading){
         return(
-            <div id="loading">
-                Loading...
+            <div id="loading-bg">
+                <div id="loading-container">
+                    <div class="loader"></div>
+                </div>
             </div>
         );
     }

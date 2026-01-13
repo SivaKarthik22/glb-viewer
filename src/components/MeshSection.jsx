@@ -48,34 +48,36 @@ export default function MeshSection() {
 
     return (
         <div id="mesh-section">
-            <div>
-                <label>Highlight selection: </label>
-                <input
-                    type="checkbox"
-                    checked={enableHighlight}
-                    onChange={enableOrDisableHighlight}
-                />
-            </div>
-            <div>
-                <button onClick={focusFunctionality}>Focus in outliner</button>
-                <label>Auto-focus</label>
-                <input
-                    type="checkbox"
-                    checked={autoFocus}
-                    onChange={toggleAutoFocus}
-                />
-            </div>
-            <div>
-                <label>Isolation mode: </label>
-                <input
-                    type="checkbox"
-                    checked={isolationMode}
-                    onChange={toggleIsolationMode}
-                />
-            </div>
-            <div className="flex" style={{alignItems:"center", justifyContent:"space-between"}}>
-                <h4 style={{ margin: 0 }}>Scene Meshes</h4>
-                {loading ? <></> : <button onClick={handleShowAll}>Unhide All</button>}
+            <div style={{padding:"0.75em 0.75em 0.5em 0.75em"}}>
+                <div>
+                    <label>Highlight selection: </label>
+                    <input
+                        type="checkbox"
+                        checked={enableHighlight}
+                        onChange={enableOrDisableHighlight}
+                    />
+                </div>
+                <div>
+                    <button onClick={focusFunctionality}>Focus in outliner</button>
+                    <label>Auto-focus</label>
+                    <input
+                        type="checkbox"
+                        checked={autoFocus}
+                        onChange={toggleAutoFocus}
+                    />
+                </div>
+                <div>
+                    <label>Isolation mode: </label>
+                    <input
+                        type="checkbox"
+                        checked={isolationMode}
+                        onChange={toggleIsolationMode}
+                    />
+                </div>
+                <div className="flex" style={{alignItems:"center", justifyContent:"space-between"}}>
+                    <h4 style={{ margin: 0 }}>Scene Meshes</h4>
+                    {loading ? <></> : <button onClick={handleShowAll}>Unhide All</button>}
+                </div>
             </div>
             {loading ? <p>Loading...</p> : displaySceneHeirarchy()}
         </div>
@@ -103,26 +105,26 @@ const HeirarchyComp = memo( ({ parentObj, showUnit = true, enableEyeBtn = true }
 
     return (<>
         {showUnit ?
-            <div className="unit" ref={selectedMesh == parentObj.uniqueId ? heirarchyCompRef : null}>
+            <div className={`${selectedMesh == parentObj.uniqueId ? "selected " : ""}unit`} ref={selectedMesh == parentObj.uniqueId ? heirarchyCompRef : null}>
                 {childObjs.length != 0 ?
                     <button className="unfold-btn" onClick={() => dispatchOutlinerActions({type:"toggle_fold_unfold", payload: parentObj.uniqueId}) }>
                         {unfolded ? <i class="fi fi-rr-minus"></i> : <i class="fi fi-rr-plus"></i>}
                     </button>
-                    : <></>
+                    : <div></div>
                 }
                 <div
                     id={parentObj.uniqueId}
-                    className={`${selectedMesh == parentObj.uniqueId ? "selected " : ""}unit-name no-break`}
+                    className="unit-name no-break"
                     onClick={handleUnitNameClick}
                 >
-                    {parentObj instanceof Mesh ? <i className="fi fi-rr-cube"></i> : <i className="fi fi-rr-code-branch"></i>}
-                    <span className="gap-left">{parentObj.name}</span>
+                    {parentObj instanceof Mesh ? <i className="fi fi-rr-cube gap-right"></i> : <i className="fi fi-rr-code-branch gap-right"></i>}
+                    {parentObj.name}
                 </div>
                 {parentObj instanceof Mesh ?
                     <button className="details-btn" onClick={() => dispatchOutlinerActions({type:"toggle_show_hide_details", payload: parentObj.uniqueId}) }>
                         {showDetails ? <i class="fi fi-rr-angle-small-up"></i> : <i class="fi fi-rr-angle-small-down"></i>}
                     </button>
-                    : <></>
+                    : <div></div>
                 }
                 <button disabled={!enableEyeBtn} onClick={handleMeshStateChange} className="eye-btn">{nodeState ? <i className="fi fi-rs-eye"></i> : <i className="fi fi-rs-crossed-eye"></i>}</button>
             </div> :
@@ -131,9 +133,9 @@ const HeirarchyComp = memo( ({ parentObj, showUnit = true, enableEyeBtn = true }
         {(showDetails && parentObj instanceof Mesh) ?
             <ul className="details-list">
                 {parentObj.material ? <>
-                    <li className="no-break"><i class="fi fi-rr-palette"></i>{parentObj.material.name}</li>
-                    {parentObj.material.getActiveTextures().map((tex, idx) => <li className="no-break" key={idx}><i class="fi fi-rr-picture"></i>{tex.name}</li>)}
-                </> : <li>@ no material</li>}
+                    <li className="no-break"><i class="fi fi-rr-palette gap-right"></i>{parentObj.material.name}</li>
+                    {parentObj.material.getActiveTextures().map((tex, idx) => <li className="no-break" key={idx}><i class="fi fi-rr-picture gap-right xsmall"></i>{tex.name}</li>)}
+                </> : <li><i class="fi fi-rr-palette gap-right"></i>no material</li>}
             </ul>
             : <></>
         }

@@ -18,7 +18,7 @@ function SidePanel() {
                     className="side-panel-toggle"
                     id="disable-side-panel"
                     onClick={toggleSidePanelVisibility}
-                >{">>"}</button>
+                ><i class="fi fi-sr-angle-double-right"></i></button>
                 <div id="panel-head">
                     <button
                         id="Mesh"

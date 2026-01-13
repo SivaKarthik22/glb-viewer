@@ -33,7 +33,7 @@ export default function SceneSection() {
     }
 
     return (
-        <div>
+        <div style={{padding:"0.75em"}}>
             <h4>Enironment</h4>
             <div className="flex">
                 {

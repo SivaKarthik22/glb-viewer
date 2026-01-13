@@ -106,7 +106,7 @@ const ToggleButton = ({toggleState, setToggleState}) => {
             className={`toggle-btn ${toggleState ? "close-btn" : "open-btn"}`}
             onClick={()=> setToggleState(toggleState => !toggleState)}
         >
-            {toggleState ? ">>" : "<<"}
+            {toggleState ? <i class="fi fi-br-chevron-double-down"></i> : <i class="fi fi-br-chevron-double-up"></i>}
         </button>
     );
 }
