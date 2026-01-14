@@ -111,7 +111,7 @@ button:active{
   position: absolute;
   left: 20px;
   cursor: pointer;
-  padding: 0.9em 1em 0.7em 1em;
+  padding: 0.7em 0.8em 0.4em 0.8em;
   background-color: var(--very-dark-bg-color);
   border-radius: 0.75em 0.75em 0 0;
 }
@@ -187,7 +187,7 @@ button:active{
   position: absolute;
   top: 25px;
   cursor: pointer;
-  padding: 1em 0.75em 0.75em 0.9em;
+  padding: 0.75em 0.6em 0.5em 0.7em;
   background-color: var(--very-dark-bg-color);
   border-radius: 0.75em 0 0 0.75em;
 }
@@ -196,7 +196,7 @@ button:active{
   background-color: var(--main-color1);
 }
 #disable-side-panel{
-  left: -3.15em;
+  left: -2.8em;
   background-color: var(--very-dark-bg-color);
 }
 
