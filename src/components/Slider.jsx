@@ -7,8 +7,10 @@ function Slider() {
 
     const handleMouseMove = useCallback((event) => {
         let widthPercent = (window.innerWidth - event.clientX) / window.innerWidth * 100;
-        widthPercent = Math.max(widthPercent, 15);
-        widthPercent = Math.min(widthPercent, 50);
+        let maxWidthPercent = 50;
+        let minWidthPercent = 240 / window.innerWidth * 100;
+        widthPercent = Math.max(widthPercent, minWidthPercent);
+        widthPercent = Math.min(widthPercent, maxWidthPercent);
         setVariableWidth(widthPercent);
     }, []);
 

@@ -89,37 +89,37 @@ class MyScene{
         }
     }
 
-    createEnvironment(envName, colorName = "NONE"){
+    createEnvironment(envName, colorName = "None"){
         this.calculateBoundingInfo();
         this.configureCamera();
         this.setSkyBox(envName, colorName);
         this.setSceneColor(colorName);
     }
 
-    setSkyBox(envName, colorName = "NONE"){
+    setSkyBox(envName, colorName = "None"){
         if(this.hdrTexture)
             this.hdrTexture.dispose();
         if(this.skbox)
             this.skbox.dispose();
 
-        const envPath = envName in environmentNames ? environmentNames[envName] : environmentNames["STUDIO"];
+        const envPath = envName in environmentNames ? environmentNames[envName] : environmentNames["Studio"];
         const skyboxSize = this.sceneBoundingInfo ? this.sceneBoundingInfo.boundingSphere.radiusWorld * 5000 : 5000;
 
         this.hdrTexture = new CubeTexture(envPath, this.scene);
         this.skbox = this.scene.createDefaultSkybox(this.hdrTexture, true, skyboxSize, 0.4);
         this.skbox.layerMask = 0xFFFFFFFF;
 
-        if(colorName in colorNames && colorName != "NONE")
+        if(colorName in colorNames && colorName != "None")
             this.skbox.setEnabled(false);
     }
 
     setSceneColor(colorName){
-        if(colorName == "NONE"){
+        if(colorName == "None"){
             this.skbox.setEnabled(true);
             return;
         }
         this.skbox.setEnabled(false);
-        const color = Color3.FromHexString(colorName in colorNames ? colorNames[colorName] : colorNames["GREY"]);
+        const color = Color3.FromHexString(colorName in colorNames ? colorNames[colorName] : colorNames["Grey"]);
         this.scene.clearColor = color;
     }
 

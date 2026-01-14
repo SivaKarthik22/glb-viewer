@@ -18,8 +18,8 @@ export const ContextProvider = ({ children }) => {
     const [toastMessage, setToastMessage] = useState("");
     const [toastType, setToastType] = useState("none");
 
-    const [currentEnvironment, setCurrentEnvironment] = useState("STUDIO");
-    const [currentColor, setCurrentColor] = useState("NONE");
+    const [currentEnvironment, setCurrentEnvironment] = useState("Studio");
+    const [currentColor, setCurrentColor] = useState("None");
     const [wireframe, setWireframe] = useState(false);
     const [textureMode, setTextureMode] = useState("textured");
     const [statsData, setStatsData] = useState({

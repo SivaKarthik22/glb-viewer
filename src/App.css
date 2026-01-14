@@ -4,7 +4,8 @@
 --main-color1: #211C6A;
 --main-color2: cornflowerblue;
 --light-bg-color: lightgrey;
---dark-bg-color: darkgrey; 
+--dark-bg-color: darkgrey;
+--very-dark-bg-color: rgb(105, 105, 105);
 --white-color: white;
 }
 
@@ -40,7 +41,7 @@ button:active{
 
 #side-panel{
   width: 20%;
-  max-width: 800px;
+  min-width: 240px;
   display: flex;
   flex-direction: column;
   background-color: grey;
@@ -59,6 +60,11 @@ button:active{
 
 .section-heading{
   flex: 1;
+  font-size: 0.9em;
+  background-color: var(--very-dark-bg-color);
+}
+.section-heading.selected{
+  background-color: var(--main-color1);
 }
 
 #abs-buttons{
@@ -107,17 +113,17 @@ button:active{
 
 #slider{
   width: 7px;
-  background-color: black;
+  background-color: var(--dark-bg-color);
   cursor: col-resize;
   height: 100vh;
 }
 
 #slider.hover{
-  background-color: lightgrey;
+  background-color: var(--light-bg-color);
 }
 
 #slider.no-hover{
-  background-color: black;
+  background-color: var(--dark-bg-color);
 }
 
 .upload-input{
@@ -163,17 +169,23 @@ button:active{
   display: flex;
   gap: 5px;
   flex-wrap: wrap;
+  align-items: center;
+}
+
+.basic-flex{
+  display: flex;
+  align-items: center;
 }
 
 .selected{
-  background-color: rgb(105, 105, 105);
+  background-color: var(--very-dark-bg-color);
 }
 
 #heirarchy-container{
   overflow-x: hidden;
   overflow-y: auto;
   width: 100%;
-  height: calc(100% - 100px)
+  height: calc(100% - 10em)
 }
 
 #mesh-section{
@@ -243,7 +255,7 @@ button:active{
 }
 
 .abs-btn{
-  border-radius: 0.5em;
+  border-radius: 0.4em;
   font-size: 1.2em;
   text-align: center;
   height: 2.25em;
@@ -270,6 +282,57 @@ button:active{
 }
 .xsmall{
   font-size: smaller;
+}
+.medium{
+  font-size: 0.9em;
+}
+.black{
+  color: black;
+}
+.checkbox-input{
+  width: 16px;
+  height: 16px;
+  accent-color: var(--main-color1);
+}
+
+#focus-outliner-btn{
+  width: 100%;
+  color: black;
+  background-color: var(--dark-bg-color);
+  padding: 0.5em;
+  border-radius: 0.3em;
+  margin: 0.5em 0 0.9em 0;
+}
+
+#show-all-btn{
+  color: black;
+  background-color: var(--dark-bg-color);
+  padding: 0.2em 0.5em;
+  border-radius: 0.3em;
+}
+
+.fi{
+  pointer-events: none;
+}
+
+#scene-section{
+  padding: 0.75em;
+}
+#scene-section h4{
+  margin-bottom: 0.75em;
+  font-size: 15px;
+}
+#scene-section h4:nth-of-type(1){
+  margin-top: 1em;
+}
+
+.env-btn{
+  padding: 0.6em;
+  border-radius: 0.6em;
+  background-color: var(--very-dark-bg-color);
+}
+.env-btn.selected{
+  background-color: var(--main-color1);
 }
 
 #loading-container{

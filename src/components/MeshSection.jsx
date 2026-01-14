@@ -48,38 +48,41 @@ export default function MeshSection() {
 
     return (
         <div id="mesh-section">
-            <div style={{padding:"0.75em 0.75em 0.5em 0.75em"}}>
-                <div>
+            <div style={{padding:"0.75em 0.75em 0.3em 0.75em"}}>
+                <div className="medium basic-flex black">
                     <label>Highlight selection: </label>
                     <input
                         type="checkbox"
                         checked={enableHighlight}
                         onChange={enableOrDisableHighlight}
+                        className="checkbox-input"
                     />
                 </div>
-                <div>
-                    <button onClick={focusFunctionality}>Focus in outliner</button>
-                    <label>Auto-focus</label>
-                    <input
-                        type="checkbox"
-                        checked={autoFocus}
-                        onChange={toggleAutoFocus}
-                    />
-                </div>
-                <div>
+                <div className="medium basic-flex black">
                     <label>Isolation mode: </label>
                     <input
                         type="checkbox"
                         checked={isolationMode}
                         onChange={toggleIsolationMode}
+                        className="checkbox-input"
                     />
                 </div>
+                <div className="medium basic-flex black">
+                    <label>Auto-focus: </label>
+                    <input
+                        type="checkbox"
+                        checked={autoFocus}
+                        onChange={toggleAutoFocus}
+                        className="checkbox-input"
+                    />
+                </div>
+                <button id="focus-outliner-btn" className="medium" onClick={focusFunctionality}>Focus in outliner</button>
                 <div className="flex" style={{alignItems:"center", justifyContent:"space-between"}}>
                     <h4 style={{ margin: 0 }}>Scene Meshes</h4>
-                    {loading ? <></> : <button onClick={handleShowAll}>Unhide All</button>}
+                    {loading ? <></> : <button id="show-all-btn" onClick={handleShowAll}>Unhide All</button>}
                 </div>
             </div>
-            {loading ? <p>Loading...</p> : displaySceneHeirarchy()}
+            {loading ? <p style={{padding:"0.75em"}}>Loading...</p> : displaySceneHeirarchy()}
         </div>
     );
 }
