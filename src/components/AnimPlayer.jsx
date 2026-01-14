@@ -86,7 +86,7 @@ function AnimPlayer(){
                             onChange={event => setSliderValue(event.target.value)}
                             onInput={handleSliderSliding}
                         />
-                        <select value={curAnimIdx} onChange={handleAnimationChange}>
+                        <select value={curAnimIdx} onChange={handleAnimationChange} id="anim-dropdown" className="no-break">
                             {scene.animationGroups.map((anim,idx) => <option key={idx} value={idx}>{anim.name}</option>)}
                         </select>
                     </div> :

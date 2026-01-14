@@ -68,7 +68,7 @@ export default function MeshSection() {
                     />
                 </div>
                 <div className="medium basic-flex black">
-                    <label>Auto-focus: </label>
+                    <label>Auto-focus in outliner: </label>
                     <input
                         type="checkbox"
                         checked={autoFocus}

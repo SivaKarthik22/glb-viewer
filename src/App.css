@@ -7,6 +7,7 @@
 --dark-bg-color: darkgrey;
 --very-dark-bg-color: rgb(105, 105, 105);
 --white-color: white;
+--normal-grey: grey;
 }
 
 #root {
@@ -22,10 +23,10 @@ button{
   background-color: var(--main-color1);
 }
 button:hover{
-  filter: brightness(125%);
+  filter: contrast(150%);
 }
 button:active{
-  filter: contrast(150%);
+  filter: contrast(200%);
 }
 
 .canvas-container{
@@ -44,7 +45,7 @@ button:active{
   min-width: 240px;
   display: flex;
   flex-direction: column;
-  background-color: grey;
+  background-color: var(--normal-grey);
   height: 100vh;
   position: relative;
 }
@@ -75,24 +76,52 @@ button:active{
 
 #anim-player{
   display: flex;
-  background-color: darkgrey;
+  align-items: center;
+  justify-content: space-around;
+  background-color: var(--normal-grey);
   width: 100%;
   align-items: center;
   justify-content: space-between;
-  gap:2em;
-  padding: 1em 2em;
+  gap:1em;
+  padding: 1em 1.5em;
   position: relative;
+}
+
+#anim-slider{
+  flex: 1;
+  display: block;
+}
+
+#anim-dropdown{
+  max-width: 200px;
+  background-color: var(--dark-bg-color);
+  color: black;
+  padding: 0.5em;
+  border-radius: 0.4em;
+  outline: none;
+  cursor: pointer;
+}
+
+#anim-player input[type=range]{
+  accent-color: var(--main-color1);
+  cursor: pointer;
 }
 
 .toggle-btn{
   position: absolute;
-  left: 10px;
+  left: 20px;
+  cursor: pointer;
+  padding: 0.9em 1em 0.7em 1em;
+  background-color: var(--very-dark-bg-color);
+  border-radius: 0.75em 0.75em 0 0;
 }
 .toggle-btn.close-btn{
-  bottom: 55px;
+  bottom: 65px;
+  background-color: var(--very-dark-bg-color);
 }
 .toggle-btn.open-btn{
   bottom: 0;
+  background-color: var(--main-color1);
 }
 
 #pre-canvas{
@@ -155,14 +184,19 @@ button:active{
 
 .side-panel-toggle{
   position: absolute;
-  top: 10px;
+  top: 25px;
   cursor: pointer;
+  padding: 1em 0.75em 0.75em 0.9em;
+  background-color: var(--very-dark-bg-color);
+  border-radius: 0.75em 0 0 0.75em;
 }
 #enable-side-panel{
   right: 0;
+  background-color: var(--main-color1);
 }
 #disable-side-panel{
-  left: -30px;
+  left: -3.15em;
+  background-color: var(--very-dark-bg-color);
 }
 
 .flex{
@@ -249,11 +283,6 @@ button:active{
   color: rgb(18, 18, 18);
 }
 
-#anim-slider{
-  flex: 1;
-  display: block;
-}
-
 .abs-btn{
   border-radius: 0.4em;
   font-size: 1.2em;
@@ -270,7 +299,7 @@ button:active{
 
 #play-btn{
   background: none;
-  color: #211C6A;
+  color: var(--white-color);
   font-size: 1.2em;
 }
 
@@ -293,13 +322,27 @@ button:active{
   width: 16px;
   height: 16px;
   accent-color: var(--main-color1);
+  cursor: pointer;
+}
+.radio-label{
+  display: flex;
+  align-items: start;
+  gap: 5px;
+  margin-left: 0.75em;
+}
+.radio-label input{
+  margin: 0;
+  cursor: pointer;
+}
+.radio-label:nth-of-type(1){
+  margin-bottom: 0.5em;
 }
 
 #focus-outliner-btn{
   width: 100%;
   color: black;
   background-color: var(--dark-bg-color);
-  padding: 0.5em;
+  padding: 0.4em;
   border-radius: 0.3em;
   margin: 0.5em 0 0.9em 0;
 }
@@ -321,9 +364,17 @@ button:active{
 #scene-section h4{
   margin-bottom: 0.75em;
   font-size: 15px;
+  margin-top: 20px;
 }
 #scene-section h4:nth-of-type(1){
   margin-top: 1em;
+}
+
+.stats-grid{
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 5px;
+  margin-left: 10px;
 }
 
 .env-btn{

@@ -1,11 +1,11 @@
 import { useContext } from "react";
 import MyScene from "../classes/MyScene";
-import {colorNames, environmentNames} from "../utils/environmentNames";
+import { colorNames, environmentNames } from "../utils/environmentNames";
 import { Context } from "../context API/ContextProvider";
 
 export default function SceneSection() {
     const mySceneObj = MyScene.getInstanceOfMyScene();
-    const {setCurrentEnvironment, currentEnvironment, currentColor, setCurrentColor, wireframe, setWireframe, textureMode, setTextureMode, statsData, loading} = useContext(Context);
+    const { setCurrentEnvironment, currentEnvironment, currentColor, setCurrentColor, wireframe, setWireframe, textureMode, setTextureMode, statsData, loading } = useContext(Context);
 
     const handleViewModeChange = event => {
         setTextureMode(event.target.value);
@@ -17,17 +17,17 @@ export default function SceneSection() {
         mySceneObj.enableDisableWireframeView(event.target.checked);
     };
 
-    function formatNumberString(num){
-        if(num == 0) return num;
+    function formatNumberString(num) {
+        if (num == 0) return num;
 
         let arr = [], count = 0;
-        while(num > 0){
-            if(count > 0 && count%3 === 0)
+        while (num > 0) {
+            if (count > 0 && count % 3 === 0)
                 arr.push(',');
-            let digit = num%10;
+            let digit = num % 10;
             arr.push(digit);
             count++;
-            num = Math.floor(num/10);
+            num = Math.floor(num / 10);
         }
         return arr.reverse().join('');
     }
@@ -41,7 +41,7 @@ export default function SceneSection() {
                         <button
                             className={`env-btn ${envName == currentEnvironment ? "selected" : ""}`}
                             key={index}
-                            onClick={()=>{
+                            onClick={() => {
                                 mySceneObj.setSkyBox(envName, currentColor);
                                 setCurrentEnvironment(envName);
                             }}
@@ -57,7 +57,7 @@ export default function SceneSection() {
                         <button
                             className={`env-btn ${colorName == currentColor ? "selected" : ""}`}
                             key={index}
-                            onClick={()=>{
+                            onClick={() => {
                                 mySceneObj.setSceneColor(colorName);
                                 setCurrentColor(colorName);
                             }}
@@ -68,46 +68,51 @@ export default function SceneSection() {
 
             <h4>View mode</h4>
             <div>
-                <label>
-                    <input 
-                    type="radio"
-                    value="textured" 
-                    checked={textureMode === "textured"} 
-                    onChange={handleViewModeChange}
-                    /> Textured View
-                </label>
-                <br />
-                <label>
-                    <input 
-                    type="radio"
-                    value="solid" 
-                    checked={textureMode === "solid"} 
-                    onChange={handleViewModeChange}
-                    /> Solid View
-                </label>
+                <div className="radio-label medium">
+                    <input
+                        type="radio"
+                        value="textured"
+                        checked={textureMode === "textured"}
+                        onChange={handleViewModeChange}
+                        className="checkbox-input"
+                    />
+                    Textured View
+                </div>
+                <div className="radio-label medium">
+                    <input
+                        type="radio"
+                        value="solid"
+                        checked={textureMode === "solid"}
+                        onChange={handleViewModeChange}
+                        className="checkbox-input"
+                    />
+                    Solid View
+                </div>
             </div>
 
-            <h4>Wireframe view</h4>
-            <div>
-                <input 
-                type="checkbox"
-                checked={wireframe} 
-                onChange={handleWireframeViewChange}
+            <div className="flex">
+                <h4>Wireframe view:</h4>
+                <input
+                    type="checkbox"
+                    className="checkbox-input"
+                    checked={wireframe}
+                    onChange={handleWireframeViewChange}
+                    style={{ marginBottom: 0 }}
                 />
             </div>
-            
-            <h4>Stats</h4>
-            <div>
-                {loading ? <p>Loading...</p> : 
-                    <ul>
-                        <li>Total meshes: {formatNumberString(statsData.meshCount)}</li>
-                        <li>Total triangles: {formatNumberString(statsData.trisCount)}</li>
-                        <li>Total vertices: {formatNumberString(statsData.vertsCount)}</li>
-                        <li>Total Materials: {formatNumberString(statsData.matCount)}</li>
-                        <li>Total Textures: {formatNumberString(statsData.texsCount)}</li>
-                    </ul>
-                }
-            </div>
+
+            <h4>Scene Stats</h4>
+
+            {loading ? <p>Loading...</p> :
+                <div className="stats-grid medium">
+                    <span>Total meshes:</span><span>{formatNumberString(statsData.meshCount)}</span>
+                    <span>Total triangles:</span><span>{formatNumberString(statsData.trisCount)}</span>
+                    <span>Total vertices:</span><span>{formatNumberString(statsData.vertsCount)}</span>
+                    <span>Total Materials:</span><span>{formatNumberString(statsData.matCount)}</span>
+                    <span>Total Textures:</span><span>{formatNumberString(statsData.texsCount)}</span>
+                </div>
+            }
+
         </div>
     );
 }
