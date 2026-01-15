@@ -52,8 +52,7 @@ export const ContextProvider = ({ children }) => {
         };
         reader.onerror = (error) => {
             disableCanvas();
-            enableToast("Error loading file", "error")
-            console.error(error);
+            enableToast("Error loading file!", "error");
         }
         reader.readAsDataURL(file);
     }

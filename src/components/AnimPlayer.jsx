@@ -75,7 +75,7 @@ function AnimPlayer(){
             <>
                 {showAnimPlayer ?
                     <div id="anim-player">
-                        <button id="play-btn" onClick={handlePlayPause}>{playing ? <i class="fi fi-sr-pause"></i> : <i class="fi fi-sr-play"></i>}</button>
+                        <button id="play-btn" onClick={handlePlayPause}>{playing ? <i className="fi fi-sr-pause"></i> : <i className="fi fi-sr-play"></i>}</button>
                         <input
                             type="range"
                             min={minRange}
@@ -106,7 +106,7 @@ const ToggleButton = ({toggleState, setToggleState}) => {
             className={`toggle-btn ${toggleState ? "close-btn" : "open-btn"}`}
             onClick={()=> setToggleState(toggleState => !toggleState)}
         >
-            {toggleState ? <i class="fi fi-br-chevron-double-down"></i> : <i class="fi fi-br-chevron-double-up"></i>}
+            {toggleState ? <i className="fi fi-br-chevron-double-down"></i> : <i className="fi fi-br-chevron-double-up"></i>}
         </button>
     );
 }

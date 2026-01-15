@@ -18,18 +18,18 @@ function SidePanel() {
                     className="side-panel-toggle"
                     id="disable-side-panel"
                     onClick={toggleSidePanelVisibility}
-                ><i class="fi fi-sr-angle-double-right"></i></button>
+                ><i className="fi fi-sr-angle-double-right"></i></button>
                 <div id="panel-head">
                     <button
                         id="Mesh"
                         className= {`${currentSection === "Mesh" ? "selected " : ""}section-heading`}
                         onClick={sectionBtnClick}
-                    ><i class="fi fi-sr-cube gap-right"></i>Scene</button>
+                    ><i className="fi fi-sr-cube gap-right"></i>Scene</button>
                     <button
                         id="Scene"
                         className= {`${currentSection === "Scene" ? "selected " : ""}section-heading`}
                         onClick={sectionBtnClick}
-                    ><i class="fi fi-sr-settings gap-right"></i>Settings</button>
+                    ><i className="fi fi-sr-settings gap-right"></i>Settings</button>
                 </div>
                 <div id="panel-body">
                     {currentSection === "Mesh" && <MeshSection />}

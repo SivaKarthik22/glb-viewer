@@ -23,7 +23,6 @@ class MyScene{
     async importMeshFromFile(glbFile){
         this.container = await LoadAssetContainerAsync(glbFile);
         this.container.addAllToScene();
-        console.log(this.container);
     }
 
     prepareMeshesForDebugMode(){
@@ -79,7 +78,6 @@ class MyScene{
             return;
         this.container.removeAllFromScene();
         this.container = null;
-        console.log(this.scene.meshes);
     }
 
     static disposeInstanceOfMyScene(){
@@ -201,7 +199,8 @@ class MyScene{
             return;
         
         let meshCount=0, matCount=0, trisCount=0, vertsCount=0, texsCount=0;
-        meshCount = this.container.meshes.length;
+        meshCount = this.container.meshes.length - 1;
+        meshCount = meshCount < 0 ? 0 : meshCount;
         matCount = this.container.materials.length;
         texsCount = this.container.textures.length;
         
@@ -314,7 +313,6 @@ class MyScene{
 
     resetSceneAnimations(){
         const animationGroups = this.scene?.animationGroups ?? [];
-        console.log(animationGroups)
         if(animationGroups.length == 0) return;
         this.scene.animationGroups.forEach(anim => anim.stop() );
         this.scene.animationGroups[0].play(true);

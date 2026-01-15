@@ -28,7 +28,7 @@ function AbsoluteButtons() {
             />
             {enableCanvas ? <div style={{display:"flex", gap:"0.5em"}}>
                 <UploadButton icon="fi fi-rr-upload" buttonType="abs-btn" />
-                <button onClick={handleFocusBtnClick} className="abs-btn"><i class="fi fi-rr-arrows-to-eye"></i></button>
+                <button onClick={handleFocusBtnClick} className="abs-btn"><i className="fi fi-rr-arrows-to-eye"></i></button>
             </div> : ""}
         </div>
     );

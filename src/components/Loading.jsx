@@ -8,7 +8,7 @@ export default function LoadingComp(){
         return(
             <div id="loading-bg">
                 <div id="loading-container">
-                    <div class="loader"></div>
+                    <div className="loader"></div>
                 </div>
             </div>
         );

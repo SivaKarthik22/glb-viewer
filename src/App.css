@@ -166,8 +166,9 @@ button:active{
   left: 50%;
   transform: translateX(-50%);
   background-color: blanchedalmond;
-  padding: 15px;
+  padding: 15px 20px;
   color: black;
+  border-radius: 0.25em;
 }
 
 #toaster.warning{
@@ -175,7 +176,7 @@ button:active{
 }
 
 #toaster.error{
-  background-color: red;
+  background-color: #F63049;
   color: white;
 }
 

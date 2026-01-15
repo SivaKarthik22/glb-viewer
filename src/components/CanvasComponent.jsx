@@ -46,9 +46,8 @@ function CanvasComponent() {
       setLoading(false);
     }
     catch (err) {
-      enableToast("Error occurred", "error");
+      enableToast("Error occurred!", "error");
       disableCanvas();
-      console.error(err);
     }
   }
 

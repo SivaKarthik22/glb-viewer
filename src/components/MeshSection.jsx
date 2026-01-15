@@ -111,7 +111,7 @@ const HeirarchyComp = memo( ({ parentObj, showUnit = true, enableEyeBtn = true }
             <div className={`${selectedMesh == parentObj.uniqueId ? "selected " : ""}unit`} ref={selectedMesh == parentObj.uniqueId ? heirarchyCompRef : null}>
                 {childObjs.length != 0 ?
                     <button className="unfold-btn" onClick={() => dispatchOutlinerActions({type:"toggle_fold_unfold", payload: parentObj.uniqueId}) }>
-                        {unfolded ? <i class="fi fi-rr-minus"></i> : <i class="fi fi-rr-plus"></i>}
+                        {unfolded ? <i className="fi fi-rr-minus"></i> : <i className="fi fi-rr-plus"></i>}
                     </button>
                     : <div></div>
                 }
@@ -125,7 +125,7 @@ const HeirarchyComp = memo( ({ parentObj, showUnit = true, enableEyeBtn = true }
                 </div>
                 {parentObj instanceof Mesh ?
                     <button className="details-btn" onClick={() => dispatchOutlinerActions({type:"toggle_show_hide_details", payload: parentObj.uniqueId}) }>
-                        {showDetails ? <i class="fi fi-rr-angle-small-up"></i> : <i class="fi fi-rr-angle-small-down"></i>}
+                        {showDetails ? <i className="fi fi-rr-angle-small-up"></i> : <i className="fi fi-rr-angle-small-down"></i>}
                     </button>
                     : <div></div>
                 }
@@ -136,9 +136,9 @@ const HeirarchyComp = memo( ({ parentObj, showUnit = true, enableEyeBtn = true }
         {(showDetails && parentObj instanceof Mesh) ?
             <ul className="details-list">
                 {parentObj.material ? <>
-                    <li className="no-break"><i class="fi fi-rr-palette gap-right"></i>{parentObj.material.name}</li>
-                    {parentObj.material.getActiveTextures().map((tex, idx) => <li className="no-break" key={idx}><i class="fi fi-rr-picture gap-right xsmall"></i>{tex.name}</li>)}
-                </> : <li><i class="fi fi-rr-palette gap-right"></i>no material</li>}
+                    <li className="no-break"><i className="fi fi-rr-palette gap-right"></i>{parentObj.material.name}</li>
+                    {parentObj.material.getActiveTextures().map((tex, idx) => <li className="no-break" key={idx}><i className="fi fi-rr-picture gap-right xsmall"></i>{tex.name}</li>)}
+                </> : <li><i className="fi fi-rr-palette gap-right"></i>no material</li>}
             </ul>
             : <></>
         }

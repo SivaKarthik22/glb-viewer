@@ -6,7 +6,7 @@ export default function SidePanelToggleButton() {
 
     if (enableCanvas && !showSidePanel) {
         return(
-            <button className="side-panel-toggle" id="enable-side-panel" onClick={toggleSidePanelVisibility}><i class="fi fi-sr-angle-double-left"></i></button>
+            <button className="side-panel-toggle" id="enable-side-panel" onClick={toggleSidePanelVisibility}><i className="fi fi-sr-angle-double-left"></i></button>
         );
     }
     return "";
