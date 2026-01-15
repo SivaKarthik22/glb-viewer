@@ -423,7 +423,7 @@ button:active{
 }
 @keyframes l8 {to{transform: rotate(.5turn)}}
 
-@media screen and (max-width: 590px) {
+@media screen and (max-width: 690px) {
   #side-panel {
     display: none;
   }
