@@ -393,7 +393,7 @@ button:active{
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: var(--main-color1);
+  background-color: var(--light-bg-color);
   padding: 30px;
   border-radius: 50%;
 }
@@ -409,7 +409,7 @@ button:active{
 .loader {
   width: 50px;
   aspect-ratio: 1;
-  color: var(--white-color);
+  color: var(--main-color1);
   --_c:no-repeat radial-gradient(farthest-side,currentColor 92%,#0000);
   background: 
     var(--_c) 50% 0   /12px 12px,
