@@ -164,7 +164,7 @@ class MyScene{
         //set scroll speed based on bb
         this.camera.wheelPrecision = 100 / this.sceneBoundingInfo.boundingSphere.radiusWorld;
         
-        this.camera.minZ = 0.01;
+        this.camera.minZ = 0.0001;
         this.camera.lowerRadiusLimit = 0.01;
         this.camera.pinchDeltaPercentage = 0.01;
         this.camera.wheelDeltaPercentage = 0.01;
