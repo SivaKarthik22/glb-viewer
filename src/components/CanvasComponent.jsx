@@ -4,7 +4,6 @@ import "@babylonjs/loaders/glTF";
 import MyScene from "../classes/MyScene";
 import { Context } from "../contextApi/ContextProvider";
 import LoadingComp from "./Loading";
-import "babylonjs-inspector";
 
 function CanvasComponent() {
   const reactCanvas = useRef(null);
@@ -86,16 +85,6 @@ function CanvasComponent() {
 
     const resizeObserver = new ResizeObserver(resize);
     resizeObserver.observe(reactCanvas.current);
-
-    //----------for debugging
-    document.addEventListener("keydown", (e) => {
-      if (e.shiftKey && e.ctrlKey) {
-        scene.debugLayer.isVisible()
-          ? scene.debugLayer.hide()
-          : scene.debugLayer.show();
-      }
-    })
-    //----------
 
     return () => {
       mySceneObj?.engine.dispose();

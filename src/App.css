@@ -422,3 +422,15 @@ button:active{
   animation: l8 1s infinite linear;
 }
 @keyframes l8 {to{transform: rotate(.5turn)}}
+
+@media screen and (max-width: 590px) {
+  #side-panel {
+    display: none;
+  }
+  .side-panel-toggle{
+    display: none;
+  }
+  #slider{
+    display: none;
+  }
+}
