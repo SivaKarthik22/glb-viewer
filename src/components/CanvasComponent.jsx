@@ -2,7 +2,7 @@ import { useContext, useEffect, useRef } from "react";
 import { PointerEventTypes } from "@babylonjs/core";
 import "@babylonjs/loaders/glTF";
 import MyScene from "../classes/MyScene";
-import { Context } from "../context API/ContextProvider";
+import { Context } from "../contextApi/ContextProvider";
 import LoadingComp from "./Loading";
 import "babylonjs-inspector";
 

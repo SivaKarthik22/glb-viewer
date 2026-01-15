@@ -1,5 +1,5 @@
 import { useContext, useEffect } from "react";
-import { Context } from "../context API/ContextProvider";
+import { Context } from "../contextApi/ContextProvider";
 
 export default function Toaster(){
     const {showToast, toastMessage, toastType, forceDisableToast} = useContext(Context);

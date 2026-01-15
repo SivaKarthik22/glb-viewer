@@ -1,5 +1,5 @@
 import { useCallback, useContext, useState } from "react";
-import { Context } from "../context API/ContextProvider";
+import { Context } from "../contextApi/ContextProvider";
 
 function Slider() {
     const [changeColor, setChangeColor] = useState(false);

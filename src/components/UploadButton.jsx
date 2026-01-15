@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Context } from "../context API/ContextProvider";
+import { Context } from "../contextApi/ContextProvider";
 
 function UploadButton({buttonText = null, icon = null, buttonType = ""}){
     const {uploadRef} = useContext(Context);

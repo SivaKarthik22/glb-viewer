@@ -1,7 +1,7 @@
 import { Mesh, TransformNode } from "@babylonjs/core";
 import MyScene from "../classes/MyScene";
 import { memo, useContext, useMemo } from "react";
-import { Context } from "../context API/ContextProvider";
+import { Context } from "../contextApi/ContextProvider";
 
 export default function MeshSection() {
     const { loading, enableHighlight, setEnableHighlight, selectedMesh, autoFocus, setAutoFocus, heirarchyCompRef, isolationMode, setIsolationMode, dispatchOutlinerActions } = useContext(Context);

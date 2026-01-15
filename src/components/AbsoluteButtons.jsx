@@ -1,6 +1,6 @@
 import UploadButton from "./UploadButton";
 import { useContext } from "react";
-import { Context } from "../context API/ContextProvider";
+import { Context } from "../contextApi/ContextProvider";
 import MyScene from "../classes/MyScene";
 
 function AbsoluteButtons() {

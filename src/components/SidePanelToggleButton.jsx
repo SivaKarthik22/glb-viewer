@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Context } from "../context API/ContextProvider";
+import { Context } from "../contextApi/ContextProvider";
 
 export default function SidePanelToggleButton() {
     const { enableCanvas, showSidePanel, toggleSidePanelVisibility } = useContext(Context);

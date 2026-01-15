@@ -1,5 +1,5 @@
 import UploadButton from "./UploadButton";
-import { Context } from "../context API/ContextProvider";
+import { Context } from "../contextApi/ContextProvider";
 import { useContext } from "react";
 
 export default function HomePage(){

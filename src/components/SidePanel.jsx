@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { Context } from "../context API/ContextProvider";
+import { Context } from "../contextApi/ContextProvider";
 import SceneSection from "./SceneSection";
 import MeshSection from "./MeshSection";
 

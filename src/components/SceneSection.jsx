@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import MyScene from "../classes/MyScene";
 import { colorNames, environmentNames } from "../utils/environmentNames";
-import { Context } from "../context API/ContextProvider";
+import { Context } from "../contextApi/ContextProvider";
 
 export default function SceneSection() {
     const mySceneObj = MyScene.getInstanceOfMyScene();
